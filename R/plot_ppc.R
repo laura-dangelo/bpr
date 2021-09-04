@@ -3,11 +3,8 @@
 #' @param object 
 #' @param perc_burnin 
 #' @param ... 
-#'
-#' @return
+#' 
 #' @export
-#'
-#' @examples
 plot.posterior_check = function(object, perc_burnin = NULL, ...)
 {
   if(!is.null(object$burnin) & is.null(perc_burnin)) { 

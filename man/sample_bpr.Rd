@@ -7,8 +7,6 @@
 sample_bpr(
   formula = NULL,
   data = NULL,
-  y = NULL,
-  X = NULL,
   iter,
   burnin = NULL,
   prior = list(type = "gaussian", b = NULL, B = NULL, tau = NULL),
@@ -24,8 +22,6 @@ sample_bpr(
 \item{formula}{an object of class "formula": a symbolic description of the model to be fitted.}
 
 \item{data}{data frame or matrix containing the variables in the model.}
-
-\item{y, X}{response variable and matrix of covariates. Alternatively to providing formula and data, one can pass y and X.}
 
 \item{iter}{number of algorithm iterations.}
 
@@ -45,6 +41,8 @@ If a value > 1 is provided, the first \code{burnin} iterations use a different t
 \item{seed}{(optional) positive integer: the seed of random number generator.}
 
 \item{nchains}{(optional) positive integer specifying the number of Markov chains. The default is 1.}
+
+\item{y, X}{response variable and matrix of covariates. Alternatively to providing formula and data, one can pass y and X.}
 }
 \value{
 An object of S3 class \code{poisreg} containing the results of the sampling. \cr\cr

@@ -1,8 +1,19 @@
-#' Print Summary of the output of sample_bpr()
+#' Summarizing Bayesian Poisson Regression Output
+#' @description This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
 #'
-#' @param object 
+#' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
+#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in.
 #'
-#' @return
+#' @return \code{summary.poisreg} returns a list with elements:
+#' @returns \code{formula} the component from \code{object}.
+#' @returns \code{data} the component from \code{object}.
+#' @returns \code{prior} \code{prior$type} from \code{object}.
+#' @returns \code{prior_pars} prior parameters from \code{object}.
+#' @returns \code{coefficients} the matrix of coefficients, standard errors and 95\% credible intervals.
+#' @returns \code{psi2} if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
+#' @returns \code{len_burnin} the length of the burn-in used to compute the estimates.
+#' @returns \code{effSize} the mean effective sample size of the chains used to compute the estimates.
+#' 
 #' @export
 #'
 #' @importFrom coda effectiveSize
@@ -50,27 +61,42 @@ summary.poisreg <- function(object, perc_burnin = NULL) {
   
   if(object$prior == "horseshoe")
   {
-    cat(paste0("(Local shrinkage parameter psi2 for horseshoe prior estimated equal to ", round(mean(object$sim$psi2[-burnin][th]),3), ")\n\n"))
+    psi2est = round(mean(object$sim$psi2[-burnin][th]),3)
+    cat(paste0("(Local shrinkage parameter psi2 for horseshoe prior estimated equal to ", psi2est, ")\n\n"))
   }
   
+  effSize = NULL
   if(object$method == "Metropolis-Hastings") 
   {
+    effSize = round(mean(effectiveSize(object$sim$beta[-burnin,][th,])))
     cat("Algorithm: \n")
     if(is.null(object$burnin)) burnin = 1
     cat(paste0(" Acceptance rate in ", nrow(object$sim$beta) - max(burnin)+1, " iterations is ", round(object$sim$acceptance_rate,4), "\n") )
     if(is.null(object$burnin) | object$thin>1) cat(paste0(" Posterior estimates computed ", text_burnin, text_thin, "\n"))
-    cat(paste0(" Mean effective sample size is equal to ", round(mean(effectiveSize(object$sim$beta[-burnin,][th,])))) )
+    cat(paste0(" Mean effective sample size is equal to ", effSize) )
   }
   
   if(object$method == "Importance Sampler") 
   {
+    effSize = round(sum(object$sim$w[-burnin][th])^2 / sum(object$sim$w[-burnin][th]^2) )
     cat("Algorithm: \n")
     if(is.null(object$burnin)) burnin = 1
     cat(paste0(" Posterior estimates computed discarding " , text_burnin, text_thin, "\n"))
-    cat(paste0(" Mean effective sample size is equal to ", round(sum(object$sim$w[-burnin][th])^2 / sum(object$sim$w[-burnin][th]^2) )) )
+    cat(paste0(" Mean effective sample size is equal to ", effSize) )
   }
   
+  out = list()
+  out$formula = object$formula
+  out$data = object$data
+  out$prior = object$prior
+  out$prior_pars = object$prior_pars
   
+  out$coefficients = tmp
+  if(object$prior == "horseshoe") out$psi2 = psi2est
+  out$len_burnin = max(burnin)
+  out$effSize = effSize
+  
+  return(invisible(out))
 }
 
 

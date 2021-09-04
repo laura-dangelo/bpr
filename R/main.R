@@ -55,7 +55,7 @@
 #' @import RcppArmadillo
 #' 
 #' @useDynLib bpr
-sample_bpr = function(formula = NULL, data = NULL, y = NULL, X = NULL,
+sample_bpr = function(formula = NULL, data = NULL,
                           iter, burnin = NULL,
                           #
                           # prior
@@ -76,25 +76,12 @@ sample_bpr = function(formula = NULL, data = NULL, y = NULL, X = NULL,
                           seed = NULL,
                           nchains = 1)
 {
-  if( (is.null(y) | is.null(X)) & (is.null(formula) | is.null(data)) ) {stop("please provide either y and X or a formula and data"); error = 1}
-  
-  ## extract column names
-  if(!is.null(X))
-  {
-    if( !is.null(attr( X, "dimnames" )) ) { colnamesX = attr( X, "dimnames" )[[2]] }
-    else { colnamesX = paste0("var", 1:ncol(X)) }
-    formula = formula(y ~ X)
-  }
-  
-  if(is.null(y) & is.null(X) & !is.null(formula) & !is.null(data))
-  {
-    X = as.matrix(model.matrix(formula, data))
-    aa = stats::formula(formula)[[2]]
-    indy = which(attr(data, "names") == aa)
-    y = data[, indy]
-    colnamesX = attr( model.matrix(formula, data), "dimnames" )[[2]]
-  }
-  
+  X = as.matrix(model.matrix(formula, data))
+  aa = stats::formula(formula)[[2]]
+  indy = which(attr(data, "names") == aa)
+  y = data[, indy]
+  colnamesX = attr( model.matrix(formula, data), "dimnames" )[[2]]
+
   error = 0
   trunc_lambda = 500
   n = length(y)
@@ -148,7 +135,6 @@ sample_bpr = function(formula = NULL, data = NULL, y = NULL, X = NULL,
   
   sim$beta = as.mcmc(sim$beta)
   colnames(sim$beta) = colnamesX
-  #class(sim) <- "poisreg"
   
   tmp = sim$acceptance_rate
   if(!is.null(burnin)) tmp2 = sim$acceptance_rate_burnin
@@ -168,7 +154,6 @@ sample_bpr = function(formula = NULL, data = NULL, y = NULL, X = NULL,
   run$prior_pars = list("b" = prior$b, "B" = prior$B, "tau" = prior$tau)
   run$thin = thin
   run$nchains = nchains
-  
   
   if(pars$method == "IS") 
   {

@@ -1,3 +1,18 @@
+#' MCMC Convergence Diagnostics
+#'
+#' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
+#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in.
+#'
+#' @return \code{mcmc_diagnostics.poisreg} returns a list with elements:
+#' @returns \code{chain_length} total length of the MCMC chains.
+#' @returns \code{len_burnin}  the length of the burn-in used to compute the estimates.
+#' @returns \code{thin} the thinning frequency used (from \code{object}).
+#' @returns \code{effSize} effective sample size of each parameter chain after removing burn-in and thinning.
+#' @returns \code{geweke} Geweke diagnostics of convergence of the chains (value of the test and p-value).
+#' @returns \code{gelman_rubin} if \code{nchains > 1}, Gelman-Rubin diagnostics of convergence.
+
+#' @export
+#'
 #' @export
 #' @importFrom coda effectiveSize geweke.diag gelman.diag
 mcmc_diagnostics.poisreg = function(object, perc_burnin = NULL)
@@ -52,5 +67,18 @@ mcmc_diagnostics.poisreg = function(object, perc_burnin = NULL)
     cat(paste0("Gelman-Rubin convergence diagnostic on ", object$nchains, " chains \n "))
     print(gelman.diag(multch))
   }
+  
+  out = list()
+  out$chain_length = nrow(object$sim$beta)
+  out$len_burnin = max(burnin)
+  out$thin = object$thin
+  
+  out$effSize = effectiveSize(object$sim$beta[-burnin,][th,])
+  out$geweke = data.frame( "Geweke test" = c(geweke.diag(object$sim$beta[-burnin,][th,])$z),
+        "Pr(>|z|)" = pnorm(abs(geweke.diag(object$sim$beta[-burnin,][th,])$z), lower.tail = F)*2  )
+  
+  if(object$nchains > 1) out$gelman_rubin = gelman.diag(multch)
+  
+  return(invisible(out))
 }
 

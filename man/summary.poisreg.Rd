@@ -2,16 +2,34 @@
 % Please edit documentation in R/summary.R
 \name{summary.poisreg}
 \alias{summary.poisreg}
-\title{Print Summary of the output of sample_bpr()}
+\title{Summarizing Bayesian Poisson Regression Output}
 \usage{
 \method{summary}{poisreg}(object, perc_burnin = NULL)
 }
 \arguments{
-\item{object}{}
+\item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
+
+\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in.}
 }
 \value{
+\code{summary.poisreg} returns a list with elements:
 
+\code{formula} the component from \code{object}.
+
+\code{data} the component from \code{object}.
+
+\code{prior} \code{prior$type} from \code{object}.
+
+\code{prior_pars} prior parameters from \code{object}.
+
+\code{coefficients} the matrix of coefficients, standard errors and 95\% credible intervals.
+
+\code{psi2} if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
+
+\code{len_burnin} the length of the burn-in used to compute the estimates.
+
+\code{effSize} the mean effective sample size of the chains used to compute the estimates.
 }
 \description{
-Print Summary of the output of sample_bpr()
+This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
 }

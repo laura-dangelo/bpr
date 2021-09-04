@@ -1,4 +1,15 @@
+#' Merge Multiple Chains
+#' @description This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain.
+#'
+#' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}), with \code{nchains > 1}.
+#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in.
+#'
+#' @return The function returns an object of class \code{poisreg} with a single element \code{$sim}. 
+#' The returned chains (elements of \code{sim}) are obtained by appending the simulated values of each independent chain, 
+#' under the assumption that they all have reached the same stationary distribution.
 #' @export
+#'
+#' @examples ## For examples, see example(sample_bpr).
 merge.poisreg = function(object, perc_burnin = NULL)
 {
   if(!is.null(object$burnin) & is.null(perc_burnin)) { 
