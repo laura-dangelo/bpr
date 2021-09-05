@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}), with \code{nchains > 1}.}
 
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in.}
+\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 The function returns an object of class \code{poisreg} with a single element \code{$sim}. 
@@ -20,5 +20,22 @@ under the assumption that they all have reached the same stationary distribution
 This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain.
 }
 \examples{
-## For examples, see example(sample_bpr).
+library(MASS) # load the data set
+head(epil)
+
+# Simulate multiple chains by setting nchains > 1
+fit4 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
+                    iter = 1000, 
+                    nchains = 4, thin = 2)
+# fit4 contains 4 elements with simulation ($sim, $sim2, $sim3, $sim4)
+
+mcmc_diagnostics(fit4)     
+# the Gelman-Rubin diagnostics confirms convergence of the 4 
+# independent chains to the same stationary distribution
+
+fit4b = merge(fit4) 
+str(fit4b$sim)    
+# fit 4b contains only one element $sim, of length 1500 
+# (which is the result of concatenating the 4 simulations, after removing the first 25\% 
+# iterations as burn-in and keeping one iteration every two).
 }

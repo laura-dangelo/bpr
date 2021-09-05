@@ -4,24 +4,18 @@
 #'
 #' @param formula an object of class "formula": a symbolic description of the model to be fitted. 
 #' @param data data frame or matrix containing the variables in the model.
-#' @param y,X response variable and matrix of covariates. Alternatively to providing formula and data, one can pass y and X.
 #' @param iter number of algorithm iterations.
 #' @param burnin (optional) a positive integer specifying the length of the burn-in. 
-#' If a value > 1 is provided, the first \code{burnin} iterations use a different tuning parameter in order to better explore the parameters space.
+#' If a value > 1 is provided, the first \code{burnin} iterations use a different tuning parameter in order to better explore the parameter space.
 #' @param prior a named list of parameters to select prior type and parameters. See the details for the \code{prior} arguments.
 #' @param pars a named list of parameters to select algorithm type and tuning parameters. See the details for the \code{pars} arguments.
-#' @param state optional vector providing the starting points for the chains.
+#' @param state optional vector providing the starting points of the chains.
 #' @param thin a positive integer specifying the period for saving samples. The default is 1.
 #' @param verbose logical (default = TRUE) indicating whether to print messages on the progress of the algorithm and possible convergence issues.
 #' @param seed (optional) positive integer: the seed of random number generator.
 #' @param nchains (optional) positive integer specifying the number of Markov chains. The default is 1.
 #'
-#' @return An object of S3 class \code{poisreg} containing the results of the sampling. \cr\cr
-#' The function \code{\link{summary}} can be used to print a summary of the posterior inference for the regression parameters and of the algorithm diagnostics. \cr
-#' The function \code{\link{mcmc_diagnostics}} prints convergence diagnostics for the sampled chains.  \cr
-#' The function \code{plot} prints the trace of the sampled values and a density estimate of the regression coefficients. See \code{\link[coda]{plot.mcmc}}.\cr
-#' The function \code{\link{posterior_predictive}} allows to compute the posterior predictive distributions to check the model. See also the related function \code{\link{plot.ppc}}.
-#' 
+#' @return An object of S3 class \code{poisreg} containing the results of the sampling. \cr
 #' \code{poisreg} is a list containing at least the following elements:
 #' @returns \code{sim} : list of the results of the sampling. It contains the following elements: \itemize{
 #' \item{ \code{beta} : \code{\link[coda]{mcmc}} object of posterior draws of the regression coefficients.}
@@ -29,23 +23,71 @@
 #' \item{ \code{time} : the total amount of time to perform the simulation. }
 #' }
 #' @returns \code{formula}  : the \code{formula} object used.
-#' @returns \code{data}  : list of the data (vector of counts and covariate matrix).
+#' @returns \code{data}  : list of the data (list with covariates \code{X} and response variable \code{y}).
 #' @returns \code{state}  : the starting points of the chain.
 #' @returns \code{burnin}  : length of the used \code{burnin}.
 #' @returns \code{prior}  : whether a Gaussian or horseshoe prior was used.
 #' @returns \code{prior_pars}  : prior parameters.
 #' @returns \code{thin}  : thinning frequency passed to the \code{thin} parameter.
-#' @returns \code{nchains}  : number of chains. If \code{nchains} was chosen >1, the list will also include additional numbered \code{sim} elements, one for each sampled chain.
+#' @returns \code{nchains}  : number of chains. If \code{nchains} was chosen >1, the list will also include additional numbered \code{sim} elements, one for each sampled chain.\cr\cr
+#' 
+#' An object of class \code{poisreg} admits class-specific methods to analyze the output.\cr
+#' The function \code{\link{summary}} can be used to print a summary of the posterior inference for the regression parameters and of the algorithm diagnostics. \cr
+#' The function \code{\link{mcmc_diagnostics}} prints convergence diagnostics for the sampled chains.  \cr
+#' The function \code{\link{plot}} prints the trace of the sampled values and a density estimate of the regression coefficients. See \code{\link[coda]{plot.mcmc}}.\cr
+#' The function \code{\link{posterior_predictive}} computes the posterior predictive distributions to check the model. See also the related function \code{\link{plot.ppc}}.
 #' 
 #' 
 #' @export
 #'
 #' @examples 
-#' # Minimal call
-#' out = sample_bpr(y = y, X = X, iter = 2000)
-#' summary(out)   # summary of posterior inference
-#' mcmc_diagnostics(out)   # summary of MCMC convergence diagnostics
-#' plot(out)   # plot the traceplot and posterior density of the regression coefficients
+#' 
+#' library(MASS) # load the data set
+#' head(epil)
+#' 
+#' fit = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
+#'                    iter = 1000)
+#'                    
+#' summary(fit)    # summary of posterior inference
+#' mcmc_diagnostics(fit)    # summary of MCMC convergence diagnostics
+#' 
+#' plot(fit)    
+#' # plot the traceplot and posterior density of the regression coefficients
+#' 
+#' plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   
+#' # plots for posterior predictive check
+#' 
+#' 
+#' 
+#' ## Examples with different options
+#' # Select prior parameters and set tuning parameter 
+#' fit2 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
+#'                     iter = 1000, 
+#'                     prior = list( type = "gaussian", b = rep(0, 6), 
+#'                                   B = diag(6) * 3 ),
+#'                     pars = list( max_dist = 10 ))
+#'                     
+#' # Horseshoe prior, with global shrinkage parameter equal to 1
+#' fit3 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
+#'                     iter = 1000, 
+#'                     prior = list( type = "horseshoe", tau = 1 ),
+#'                     pars = list( max_dist = 10 ))     
+#'                     
+#' # Simulate multiple chains and merge outputs after checking convergence
+#' fit4 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
+#'                     iter = 1000, 
+#'                     nchains = 4, thin = 2)
+#' # fit now contains additional elements ($sim2, $sim3, $sim4)
+#' 
+#' mcmc_diagnostics(fit4)     
+#' # the Gelman-Rubin diagnostics confirms convergence of the 4 
+#' # independent chains to the same stationary distribution
+#' 
+#' fit4b = merge(fit4) 
+#' str(fit4b$sim)    
+#' # fit 4b contains only one MCMC chain of length 1500 
+#' # (after thinning and burn-in)
+
 #' 
 #' @references 
 #' Carvalho, C., Polson, N., & Scott, J. (2010). The horseshoe estimator for sparse signals. Biometrika, 97(2), 465-480.

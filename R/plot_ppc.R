@@ -10,12 +10,12 @@ plot.posterior_check = function(object, perc_burnin = NULL, ...)
   if(!is.null(object$burnin) & is.null(perc_burnin)) { 
     burnin = 1:(object$burnin+1)
   } else if(is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
+    burnin = 1:round(ncol(object$y_pred)*perc_burnin)
   } else if(is.null(object$burnin) & is.null(perc_burnin)) {
     perc_burnin = 0.25
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
+    burnin = 1:round(ncol(object$y_pred)*perc_burnin)
   } else if(!is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:max( round(nrow(object$sim$beta)*perc_burnin), object$burnin)
+    burnin = 1:max( round(ncol(object$y_pred)*perc_burnin), object$burnin)
   }
   
   .plotECDF(object, burnin)
@@ -73,7 +73,7 @@ plot.posterior_check = function(object, perc_burnin = NULL, ...)
   if(length(stats) == 1){
     res = apply(object$y_pred[,-burnin], 2, function(y) do.call(stats, list(y)) )
     hist(res, main = paste0("Histogram of posterior predictive ", stats),
-         xlab = stats )
+         xlab = stats, xlim = range(c(res, do.call(stats, list(object$data$y)))) )
     subtit =  paste0("Observed value vs. posterior predictive distribution")
     mtext(side = 3, line = 0.5,  subtit)
     abline(v = do.call(stats, list(object$data$y)), col = 2, lwd = 1.5)
@@ -83,7 +83,7 @@ plot.posterior_check = function(object, perc_burnin = NULL, ...)
     for(i in 1:length(stats)) {
       res = apply(object$y_pred[,-burnin], 2, function(y) do.call(stats[i], list(y)) )
       hist(res, main = paste0("Histogram of posterior predictive ", stats[i] ),
-           xlab = stats[i] )
+           xlab = stats[i], xlim = range(c(res, do.call(stats[i], list(object$data$y)))) )
       subtit =  paste0("Observed vs. posterior predictive distribution")
       mtext(side = 3, line = 0.5,  subtit)
       abline(v = do.call(stats[i], list(object$data$y)), col = 2, lwd = 1.5)
