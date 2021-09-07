@@ -15,7 +15,8 @@ sample_bpr(
   thin = 1,
   verbose = TRUE,
   seed = NULL,
-  nchains = 1
+  nchains = 1,
+  perc_burnin = 0.25
 )
 }
 \arguments{
@@ -41,6 +42,8 @@ If a value > 1 is provided, the first \code{burnin} iterations use a different t
 \item{seed}{(optional) positive integer: the seed of random number generator.}
 
 \item{nchains}{(optional) positive integer specifying the number of Markov chains. The default is 1.}
+
+\item{perc_burnin}{(default = 0.25) percentage of the chain to be discarded to perform inference. If both burnin and perc_burnin are specified, the most conservative burn-in is considered.}
 }
 \value{
 An object of S3 class \code{poisreg} containing the results of the sampling. \cr
@@ -54,11 +57,11 @@ An object of S3 class \code{poisreg} containing the results of the sampling. \cr
 
 \code{formula}  : the \code{formula} object used.
 
-\code{data}  : list of the data (list with covariates \code{X} and response variable \code{y}).
+\code{data}  : list with elements the matrix of covariates \code{X} and response variable \code{y}.
 
 \code{state}  : the starting points of the chain.
 
-\code{burnin}  : length of the used \code{burnin}.
+\code{burnin}  : length of the used burn-in.
 
 \code{prior}  : whether a Gaussian or horseshoe prior was used.
 
@@ -66,21 +69,27 @@ An object of S3 class \code{poisreg} containing the results of the sampling. \cr
 
 \code{thin}  : thinning frequency passed to the \code{thin} parameter.
 
-\code{nchains}  : number of chains. If \code{nchains} was chosen >1, the list will also include additional numbered \code{sim} elements, one for each sampled chain.\cr\cr
+\code{nchains}  : number of chains. If \code{nchains} was chosen >1, the output list will also include additional 
+numbered \code{sim} elements, one for each sampled chain.
 
-An object of class \code{poisreg} admits class-specific methods to analyze the output.\cr
-The function \code{\link{summary}} can be used to print a summary of the posterior inference for the regression parameters and of the algorithm diagnostics. \cr
-The function \code{\link{mcmc_diagnostics}} prints convergence diagnostics for the sampled chains.  \cr
-The function \code{\link{plot}} prints the trace of the sampled values and a density estimate of the regression coefficients. See \code{\link[coda]{plot.mcmc}}.\cr
-The function \code{\link{posterior_predictive}} computes the posterior predictive distributions to check the model. See also the related function \code{\link{plot.ppc}}.
+\code{perc_burnin} : percentage of the chain used as burn-in.
 }
 \description{
 \code{sample_bpr} is used to generate draws from the posterior distribution of the coefficients of Poisson regression models. 
-The method allows for Gaussian and horseshoe (Carvalho et al, 2010) prior distributions.
+The method allows for Gaussian and horseshoe (Carvalho et al, 2010) prior distributions, 
+and relies on a Metropolis-Hastings or importance sampler algorithm. See D'Angelo and Canale (2021) for details on the algorithms.
+}
+\details{
+An object of class \code{poisreg} admits class-specific methods to analyze the output.\cr
+The function \code{\link{summary.poisreg}} can be used to obtain or print a summary of the results and of the algorithm diagnostics. \cr
+The function \code{\link{mcmc_diagnostics.poisreg}} can be used to obtain or print convergence diagnostics for the sampled chains.  \cr
+The function \code{\link{plot.poisreg}} prints the trace of the sampled values and a density estimate of the regression coefficients. 
+See \code{\link[coda]{plot.mcmc}}.\cr
+The function \code{\link{posterior_predictive.poisreg}} can be used to compute the posterior predictive distributions to check the model. 
+See also the related function \code{\link{plot.ppc}}.
 }
 \examples{
-
-library(MASS) # load the data set
+require(MASS) # load the data set
 head(epil)
 
 fit = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
@@ -90,11 +99,6 @@ summary(fit)    # summary of posterior inference
 mcmc_diagnostics(fit)    # summary of MCMC convergence diagnostics
 
 plot(fit)    
-# plot the traceplot and posterior density of the regression coefficients
-
-plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   
-# plots for posterior predictive check
-
 
 
 ## Examples with different options
@@ -128,5 +132,10 @@ str(fit4b$sim)
 
 }
 \references{
-Carvalho, C., Polson, N., & Scott, J. (2010). The horseshoe estimator for sparse signals. Biometrika, 97(2), 465-480.
+Carvalho, C., Polson, N., & Scott, J. (2010). The horseshoe estimator for sparse signals. Biometrika, 97(2), 465-480.\cr\cr
+D'Angelo, L., and Canale, A. (2021) Efficient posterior sampling for Bayesian Poisson regression. arXiv...
+}
+\seealso{
+\code{\link{summary.poisreg}} , \code{\link{mcmc_diagnostics.poisreg}} , 
+\code{\link{merge.poisreg}} , \code{\link{posterior_predictive.poisreg}}
 }

@@ -4,27 +4,25 @@
 \alias{mcmc_diagnostics.poisreg}
 \title{MCMC Convergence Diagnostics}
 \usage{
-\method{mcmc_diagnostics}{poisreg}(object, perc_burnin = NULL)
+\method{mcmc_diagnostics}{poisreg}(object)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
-
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 \code{mcmc_diagnostics.poisreg} returns a list with elements:
 
-\code{chain_length} total length of the MCMC chains.
+\code{chain_length} : total length of the MCMC chains.
 
-\code{len_burnin}  the length of the burn-in used to compute the estimates.
+\code{len_burnin} : the length of the burn-in used to compute the estimates.
 
-\code{thin} the thinning frequency used (from \code{object}).
+\code{thin} : the thinning frequency used (from \code{object}).
 
-\code{effSize} effective sample size of each parameter chain after removing burn-in and thinning.
+\code{effSize} : effective sample size of each parameter chain after removing burn-in and thinning. See \code{\link[coda]{effectiveSize}}.
 
-\code{geweke} Geweke diagnostics of convergence of the chains (value of the test and p-value).
+\code{geweke} : Geweke diagnostics of convergence of the chains (value of the test and p-value). See \code{\link[coda]{geweke.diag}}
 
-\code{gelman_rubin} if \code{nchains > 1}, Gelman-Rubin diagnostics of convergence.
+\code{gelman_rubin} : if \code{nchains > 1}, Gelman-Rubin diagnostics of convergence. See \code{\link[coda]{gelman.diag}}.
 }
 \description{
 This function is a method for class \code{poisreg}. It prints convergence diagnostics and accuracy statistics of the MCMC output.
@@ -33,12 +31,12 @@ This function is a method for class \code{poisreg}. It prints convergence diagno
 The printed output of \code{mcmc_diagnostics.poisreg} summarizes some common convergence diagnostics for Markov chains. 
 The first part recaps the total length, burn-in and thinning used for the simulation.
 
-The second part \code{MCMC Diagnostics} is a table with statistics on each chain of the regression parameters. The first column is 
-the effective sample size (see \code{\link[coda]{effectiveSize}}) computed after removing the burn-in and thinning. 
-The last two columns report the value of the statistics and observed p-value of the Geweke test of equality of the first and last part of the chain.
+The second part is a table with diagnostic statistics about each chain of the regression parameters. The first column is 
+the effective sample size computed after removing the burn-in and thinning. 
+The last two columns report the value and observed p-value of the Geweke test of equality of the first and last part of the chain.
 
 The last part is printed only if multiple chains are computed. In this case, it reports the Gelman-Rubin statistics to test convergence to the same stationary  
-distribution (\code{\link[coda]{gelman.diag}}). Values much larger than 1 suggest lack of convergence to a common distribution.
+distribution. Values much larger than 1 suggest lack of convergence to a common distribution.
 }
 \examples{
 # For examples see example(sample_bpr)

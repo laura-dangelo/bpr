@@ -4,31 +4,29 @@
 \alias{summary.poisreg}
 \title{Summarizing Bayesian Poisson Regression Fit}
 \usage{
-\method{summary}{poisreg}(object, perc_burnin = NULL)
+\method{summary}{poisreg}(object)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
-
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 \code{summary.poisreg} returns a list with elements:
 
-\code{formula} the component from \code{object}.
+\code{formula} : the component from \code{object}.
 
-\code{data} the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
+\code{data} : list with elements the matrix of covariates \code{X} and response variable \code{y}.
 
-\code{prior} \code{prior$type} from \code{object}.
+\code{prior} : \code{prior$type} from \code{object}.
 
-\code{prior_pars} prior parameters from \code{object}.
+\code{prior_pars} : prior parameters from \code{object}.
 
-\code{coefficients} the matrix of coefficients, standard errors and 95\% credible intervals.
+\code{coefficients} : the matrix of coefficient estimantes, standard errors and 95\% credible intervals.
 
-\code{psi2} if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
+\code{psi2} : if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
 
-\code{len_burnin} the length of the burn-in used to compute the estimates.
+\code{len_burnin} : the length of the burn-in used to compute the estimates.
 
-\code{effSize} the mean effective sample size of the chains used to compute the estimates.
+\code{effSize} : the mean effective sample size of the chains used to compute the estimates.
 }
 \description{
 This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
@@ -48,11 +46,10 @@ It prints the number of iterations actually used to obtain the estimates, after 
 If a Metropolis-Hastings algorithm is used, the summary reports the acceptance rate, 
 which is the most commonly used indicator to tune the performance of the algorithm, along with the mean effective sample size 
 (averaged over all parameters).
-If the importance sampler is used, the summary only reports the effective sample size, which is a computed as \eqn{\sum_{t} w_t^2 / (\sum_{t} w_t)^2}
+If the importance sampler is used, the summary only reports the effective sample size, which is computed as \eqn{\sum_{t} w_t^2 / (\sum_{t} w_t)^2}
 (where \eqn{w_t} is the sequence of weights) and is a measure of the efficiency of the sampler.
 }
 \examples{
 # For examples see example(sample_bpr)
-
 
 }

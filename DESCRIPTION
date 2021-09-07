@@ -11,5 +11,5 @@ Description: More details about what the package does. See
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.1.1
-Imports: Rcpp (>= 1.0.7), RcppArmadillo, coda
+Imports: Rcpp (>= 1.0.7), RcppArmadillo, coda, MASS
 LinkingTo: Rcpp, RcppArmadillo

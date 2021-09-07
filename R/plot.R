@@ -1,6 +1,6 @@
 #' @export
-plot.poisreg = function(object)
+plot.poisreg = function(object, ...)
 {
-  plot(object$sim$beta)
+  plot(object$sim$beta, ...)
 }
   

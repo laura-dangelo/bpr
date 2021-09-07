@@ -4,7 +4,7 @@
 \alias{merge.poisreg}
 \title{Merge Multiple Chains}
 \usage{
-\method{merge}{poisreg}(object, perc_burnin = NULL)
+\method{merge}{poisreg}(object)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}), with \code{nchains > 1}.}
@@ -17,7 +17,7 @@ The returned chains (elements of \code{sim}) are obtained by appending the simul
 under the assumption that they all have reached the same stationary distribution.
 }
 \description{
-This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain.
+This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain when sampling with \code{nchains > 1} is used.
 }
 \examples{
 library(MASS) # load the data set

@@ -1,27 +1,6 @@
-#' Title
-#'
-#' @param formula 
-#' @param data 
-#' @param y 
-#' @param X 
-#' @param iter 
-#' @param burnin 
-#' @param prior 
-#' @param pars 
-#' @param r_start 
-#' @param state 
-#' @param thin 
-#' @param verbose 
-#' @param seed 
-#' @param trunc_lambda 
-#'
-#' @return list
 #' @export
-#'
-#' @examples
-#' 
 #' @import Rcpp
-sampling = function(formula, data, y, X,
+.sampling = function(formula, data, y, X,
                     iter, burnin,
                     prior, pars,
                     r_start, state,

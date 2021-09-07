@@ -4,35 +4,37 @@
 \alias{posterior_predictive.poisreg}
 \title{Compute Posterior Predictive Distribution}
 \usage{
-\method{posterior_predictive}{poisreg}(object, perc_burnin = NULL, new_X = NULL)
+\method{posterior_predictive}{poisreg}(object, new_X = NULL)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
 
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
-
 \item{new_X}{(optional) a data frame in which to look for variables with which to predict.}
+
+\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 The call to this function returns an object of S3 class \code{posterior_check}. The object is a list with the following elements:
 
-\code{data} the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
+\code{data} : the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
 
-\code{y_pred} matrix of dimension \code{[n, iter]} (with \code{n} sample size), each column is a draw from the posterior predictive distribution.
+\code{y_pred} : matrix of dimension \code{[n, iter]} (with \code{n} sample size), each column is a draw from the posterior predictive distribution.
 
-\code{y_MAP_pred} vector of length \code{n} containing a draw from the posterior distribution obtained using the maximum a posteriori estimates (MAP) of the parameters.
+\code{y_MAP_pred} : vector of length \code{n} containing a draw from the posterior distribution obtained using the maximum a posteriori estimates (MAP) of the parameters.
 
-\code{diagnostics} list containing 2 elements: \code{CPO}, i.e. the Conditional Predictive Ordinate (Gelfand et al. 1992); and \code{LPML}, i.e. 
+\code{diagnostics} : list containing 2 elements: \code{CPO}, i.e. the Conditional Predictive Ordinate (Gelfand et al. 1992); and \code{LPML}, i.e. 
 the logarithm of the pseudo-marginal likelihood (Ibrahim et al. 2014).
 
-\code{newdata} : if the matrix \code{new_X} of new values of the covariates is provided, list of three elements: 
-\code{new_X} is the provided matrix of explanatory variables; 
-\code{y_newdata} is a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};
-\code{y_MAP_newdata} vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
-computed on the new data \code{new_X}.
+\code{newdata} : if the matrix \code{new_X} of new values of the covariates is provided, list of three elements: \itemize{
+\item{\code{new_X} : the provided matrix of explanatory variables; }
+\item{\code{y_newdata} : a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};}
+\item{\code{y_MAP_newdata} : vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
+computed on the new data \code{new_X}.}
+}
 }
 \description{
-This function is a method for class \code{poisreg}. Compute the posterior predictive distribution and summary statistics for posterior check of the model; 
+This function is a method for class \code{poisreg}. Compute the posterior predictive distribution and summary statistics for 
+posterior check of the model; 
 optionally, it also computes
 the predictive distribution with new values of the explanatory variables.
 }

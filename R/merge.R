@@ -1,5 +1,5 @@
 #' Merge Multiple Chains
-#' @description This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain.
+#' @description This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain when sampling with \code{nchains > 1} is used.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}), with \code{nchains > 1}.
 #' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in. Default is 0.25.
@@ -29,18 +29,9 @@
 #' # (which is the result of concatenating the 4 simulations, after removing the first 25% 
 #' # iterations as burn-in and keeping one iteration every two).
 
-merge.poisreg = function(object, perc_burnin = NULL)
+merge.poisreg = function(object)
 {
-  if(!is.null(object$burnin) & is.null(perc_burnin)) { 
-    burnin = 1:(object$burnin+1)
-  } else if(is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-  } else if(is.null(object$burnin) & is.null(perc_burnin)) {
-    perc_burnin = 0.25
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-  } else if(!is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:max( round(nrow(object$sim$beta)*perc_burnin), object$burnin)
-  }
+  burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
   
   th = seq(from = 1, to = nrow(object$sim$beta[-burnin,]), by = object$thin)
   

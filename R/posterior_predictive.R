@@ -1,6 +1,7 @@
 #' Compute Posterior Predictive Distribution
 #' 
-#' @description This function is a method for class \code{poisreg}. Compute the posterior predictive distribution and summary statistics for posterior check of the model; 
+#' @description This function is a method for class \code{poisreg}. Compute the posterior predictive distribution and summary statistics for 
+#' posterior check of the model; 
 #' optionally, it also computes
 #' the predictive distribution with new values of the explanatory variables.
 #'
@@ -9,24 +10,24 @@
 #' @param new_X (optional) a data frame in which to look for variables with which to predict. 
 #'
 #' @return The call to this function returns an object of S3 class \code{posterior_check}. The object is a list with the following elements:
-#' @returns \code{data} the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
-#' @returns \code{y_pred} matrix of dimension \code{[n, iter]} (with \code{n} sample size), each column is a draw from the posterior predictive distribution.
-#' @returns \code{y_MAP_pred} vector of length \code{n} containing a draw from the posterior distribution obtained using the maximum a posteriori estimates (MAP) of the parameters.
-#' @returns \code{diagnostics} list containing 2 elements: \code{CPO}, i.e. the Conditional Predictive Ordinate (Gelfand et al. 1992); and \code{LPML}, i.e. 
+#' @returns \code{data} : the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
+#' @returns \code{y_pred} : matrix of dimension \code{[n, iter]} (with \code{n} sample size), each column is a draw from the posterior predictive distribution.
+#' @returns \code{y_MAP_pred} : vector of length \code{n} containing a draw from the posterior distribution obtained using the maximum a posteriori estimates (MAP) of the parameters.
+#' @returns \code{diagnostics} : list containing 2 elements: \code{CPO}, i.e. the Conditional Predictive Ordinate (Gelfand et al. 1992); and \code{LPML}, i.e. 
 #' the logarithm of the pseudo-marginal likelihood (Ibrahim et al. 2014).
-#' @returns \code{newdata} : if the matrix \code{new_X} of new values of the covariates is provided, list of three elements: 
-#' \code{new_X} is the provided matrix of explanatory variables; 
-#' \code{y_newdata} is a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};
-#' \code{y_MAP_newdata} vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
-#' computed on the new data \code{new_X}.
-#' 
+#' @returns \code{newdata} : if the matrix \code{new_X} of new values of the covariates is provided, list of three elements: \itemize{
+#' \item{\code{new_X} : the provided matrix of explanatory variables; }
+#' \item{\code{y_newdata} : a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};}
+#' \item{\code{y_MAP_newdata} : vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
+#' computed on the new data \code{new_X}.}
+#' }
 #' @references 
 #' Gelfand, A., Dey, D. and Chang, H. (1992), Model determination using predictive distributions with implementation via sampling-based-methods (with discussion), 
 #' in ‘Bayesian Statistics 4’, University Press. \cr\cr
 #' Ibrahim, J. G., Chen, M.H. and Sinha, D. (2014), Bayesian Survival Analysis, American Cancer Society.
 #' 
 #' @export
-posterior_predictive.poisreg = function(object, perc_burnin = NULL, new_X = NULL)
+posterior_predictive.poisreg = function(object, new_X = NULL)
 {
   if(!is.null(new_X)){
     if( ncol(new_X) != ncol(object$data$X) ) stop("invalid dimension for new covariate matrix")}
@@ -35,18 +36,7 @@ posterior_predictive.poisreg = function(object, perc_burnin = NULL, new_X = NULL
   linpred = apply(object$sim$beta, 1, function(beta) X %*% beta)
   ynew = apply(linpred, 2, function(lp) rpois(nrow(X), exp(lp)))
   
-  if(!is.null(object$burnin) & is.null(perc_burnin)) { 
-    burnin = 1:(object$burnin+1)
-  } else if(is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-  } else if(is.null(object$burnin) & is.null(perc_burnin)) {
-    perc_burnin = 0.25
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-  } else if(!is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:max( round(nrow(object$sim$beta)*perc_burnin), object$burnin)
-  }
-  
-  
+  burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
   meany = rpois(nrow(X), exp( X %*% colMeans(object$sim$beta[-burnin,])) )
   
   CPO = sapply(1:length(object$data$y), function(i) .CPO_i(object$data$y[i], linpred[i,]))

@@ -2,8 +2,7 @@
 #' @description This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
-#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in. Default is 0.25.
-#' 
+#'  
 #' @details The printed output of \code{summary.poisreg} summarizes the main quantities of the fit. 
 #' The first component \code{Call} recaps the type of prior and algorithm used.
 #' 
@@ -18,52 +17,36 @@
 #' If a Metropolis-Hastings algorithm is used, the summary reports the acceptance rate, 
 #' which is the most commonly used indicator to tune the performance of the algorithm, along with the mean effective sample size 
 #' (averaged over all parameters).
-#' If the importance sampler is used, the summary only reports the effective sample size, which is a computed as \eqn{\sum_{t} w_t^2 / (\sum_{t} w_t)^2}
+#' If the importance sampler is used, the summary only reports the effective sample size, which is computed as \eqn{\sum_{t} w_t^2 / (\sum_{t} w_t)^2}
 #' (where \eqn{w_t} is the sequence of weights) and is a measure of the efficiency of the sampler.
 #' 
-#' 
 #' @return \code{summary.poisreg} returns a list with elements:
-#' @returns \code{formula} the component from \code{object}.
-#' @returns \code{data} the component from \code{object} (list with covariates \code{X} and response variable \code{y}).
-#' @returns \code{prior} \code{prior$type} from \code{object}.
-#' @returns \code{prior_pars} prior parameters from \code{object}.
-#' @returns \code{coefficients} the matrix of coefficients, standard errors and 95\% credible intervals.
-#' @returns \code{psi2} if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
-#' @returns \code{len_burnin} the length of the burn-in used to compute the estimates.
-#' @returns \code{effSize} the mean effective sample size of the chains used to compute the estimates.
+#' @returns \code{formula} : the component from \code{object}.
+#' @returns \code{data} : list with elements the matrix of covariates \code{X} and response variable \code{y}.
+#' @returns \code{prior} : \code{prior$type} from \code{object}.
+#' @returns \code{prior_pars} : prior parameters from \code{object}.
+#' @returns \code{coefficients} : the matrix of coefficient estimantes, standard errors and 95\% credible intervals.
+#' @returns \code{psi2} : if a horseshoe prior is selected, the estimate of the local shrinkage parameter.
+#' @returns \code{len_burnin} : the length of the burn-in used to compute the estimates.
+#' @returns \code{effSize} : the mean effective sample size of the chains used to compute the estimates.
 #' 
 #' @examples 
 #' # For examples see example(sample_bpr)
-#'
 #' 
 #' @export
-#'
 #' @importFrom coda effectiveSize
-summary.poisreg <- function(object, perc_burnin = NULL) {
+summary.poisreg <- function(object) {
   cat("\n")
   cat("Call: \n", "sample_poisreg( formula = ",  deparse(object$formula), 
       ", prior = ", object$prior,
       ", algorithm = ", object$method, ")", "\n\n")
   
-  if(!is.null(object$burnin) & is.null(perc_burnin)) { 
-    burnin = 1:(object$burnin+1)
-    text_burnin = "" 
-  } else if(is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-    text_burnin = paste0("discarding the first ", max(burnin), " iterations ")
-  } else if(is.null(object$burnin) & is.null(perc_burnin)) {
-    perc_burnin = 0.25
-    burnin = 1:round(nrow(object$sim$beta)*perc_burnin)
-    text_burnin = paste0("discarding the first ", max(burnin), " iterations ")
-  } else if(!is.null(object$burnin) & !is.null(perc_burnin)) {
-    burnin = 1:max( round(nrow(object$sim$beta)*perc_burnin), object$burnin)
-    text_burnin = paste0("discarding the first ", max(burnin), " iterations ")
-  }
-  
+  burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
+  text_burnin = paste0("discarding the first ", max(burnin), " iterations as burn-in")
   
   th = seq(from = 1, to = nrow(object$sim$beta[-burnin,]), by = object$thin)
   text_thin = ""
-  if(object$thin > 1) text_thin = paste0("with thinning frequency = ", object$thin)
+  if(object$thin > 1) text_thin = paste0(", with thinning frequency = ", object$thin)
   
   tmp <- do.call(data.frame, 
                  list( mean = format(colMeans(object$sim$beta[-burnin,][th,]), digits = 5),
@@ -86,16 +69,16 @@ summary.poisreg <- function(object, perc_burnin = NULL) {
     psi2est = round(mean(object$sim$psi2[-burnin][th]),3)
     cat(paste0("(Local shrinkage parameter psi2 for horseshoe prior estimated equal to ", psi2est, ")\n\n"))
   }
-  
   effSize = NULL
   if(object$method == "Metropolis-Hastings") 
   {
+    totalit = nrow(object$sim$beta[-burnin,][th,])
     effSize = round(mean(effectiveSize(object$sim$beta[-burnin,][th,])))
     cat("Algorithm: \n")
     if(is.null(object$burnin)) burnin = 1
-    if(is.null(object$burnin) | object$thin>1) cat(paste0(" Posterior estimates computed ", text_burnin, text_thin, "\n"))
-    cat(paste0(" Acceptance rate in ", nrow(object$sim$beta) - max(burnin)+1, " iterations is ", round(object$sim$acceptance_rate,4), "\n") )
-    cat(paste0(" Mean effective sample size is equal to ", effSize) )
+    if(is.null(object$burnin) | object$thin>1) cat(paste0(" Posterior estimates computed on ", totalit, " iterations after ", text_burnin, text_thin, ". \n"))
+    cat(paste0(" Mean effective sample size is equal to ", effSize, ". \n") )
+    cat(paste0(" Acceptance rate in ", nrow(object$sim$beta) - max(burnin)+1, " iterations is ", round(object$sim$acceptance_rate,4), ".") )
   }
   
   if(object$method == "Importance Sampler") 
@@ -103,8 +86,8 @@ summary.poisreg <- function(object, perc_burnin = NULL) {
     effSize = round(sum(object$sim$w[-burnin][th])^2 / sum(object$sim$w[-burnin][th]^2) )
     cat("Algorithm: \n")
     if(is.null(object$burnin)) burnin = 1
-    cat(paste0(" Posterior estimates computed discarding " , text_burnin, text_thin, "\n"))
-    cat(paste0(" Mean effective sample size is equal to ", effSize) )
+    cat(paste0(" Posterior estimates computed discarding " , text_burnin, text_thin, ". \n"))
+    cat(paste0(" Mean effective sample size is equal to ", effSize, ".") )
   }
   
   out = list()
