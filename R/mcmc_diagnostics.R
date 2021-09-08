@@ -21,6 +21,8 @@
 #' @returns \code{geweke} : Geweke diagnostics of convergence of the chains (value of the test and p-value). See \code{\link[coda]{geweke.diag}}
 #' @returns \code{gelman_rubin} : if \code{nchains > 1}, Gelman-Rubin diagnostics of convergence. See \code{\link[coda]{gelman.diag}}.
 #'
+#' @seealso \code{\link{summary.poisreg}} , \code{\link{plot.poisreg}} ,
+#' \code{\link{merge_sim.poisreg}} , \code{\link[coda]{effectiveSize}} , \code{\link[coda]{geweke.diag}} , \code{\link[coda]{gelman.diag}}
 #' @examples 
 #' # For examples see example(sample_bpr)
 #' 
@@ -82,4 +84,3 @@ mcmc_diagnostics.poisreg = function(object)
   
   return(invisible(out))
 }
-

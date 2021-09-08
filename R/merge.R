@@ -2,7 +2,6 @@
 #' @description This function is a method for class \code{poisreg}. Merge multiple MCMC chains into a unique chain when sampling with \code{nchains > 1} is used.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}), with \code{nchains > 1}.
-#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in. Default is 0.25.
 #'
 #' @return The function returns an object of class \code{poisreg} with a single element \code{$sim}. 
 #' The returned chains (elements of \code{sim}) are obtained by appending the simulated values of each independent chain, 
@@ -23,13 +22,13 @@
 #' # the Gelman-Rubin diagnostics confirms convergence of the 4 
 #' # independent chains to the same stationary distribution
 #' 
-#' fit4b = merge(fit4) 
+#' fit4b = merge_sim(fit4) 
 #' str(fit4b$sim)    
 #' # fit 4b contains only one element $sim, of length 1500 
 #' # (which is the result of concatenating the 4 simulations, after removing the first 25% 
 #' # iterations as burn-in and keeping one iteration every two).
 
-merge.poisreg = function(object)
+merge_sim.poisreg = function(object)
 {
   burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
   

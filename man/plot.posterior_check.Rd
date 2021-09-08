@@ -4,14 +4,12 @@
 \alias{plot.posterior_check}
 \title{Plot posterior check}
 \usage{
-\method{plot}{posterior_check}(object, ...)
+\method{plot}{posterior_check}(x, ...)
 }
 \arguments{
-\item{object}{object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).}
+\item{x}{object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).}
 
 \item{...}{other parameters to be passed through to plotting functions. See Details.}
-
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 The function outputs (at least) three plots for graphical posterior predictive check.\cr
@@ -41,4 +39,7 @@ plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))
 # plots for posterior predictive check
 
 
+}
+\seealso{
+\code{\link{posterior_predictive.poisreg}}
 }

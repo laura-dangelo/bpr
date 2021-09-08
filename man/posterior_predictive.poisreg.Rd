@@ -10,8 +10,6 @@
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
 
 \item{new_X}{(optional) a data frame in which to look for variables with which to predict.}
-
-\item{perc_burnin}{(optional) percentage of each chain to be discarded as burn-in. Default is 0.25.}
 }
 \value{
 The call to this function returns an object of S3 class \code{posterior_check}. The object is a list with the following elements:
@@ -29,8 +27,9 @@ the logarithm of the pseudo-marginal likelihood (Ibrahim et al. 2014).
 \item{\code{new_X} : the provided matrix of explanatory variables; }
 \item{\code{y_newdata} : a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};}
 \item{\code{y_MAP_newdata} : vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
-computed on the new data \code{new_X}.}
-}
+computed on the new data \code{new_X}.} }
+
+\code{perc_burnin} : the component from \code{object}.
 }
 \description{
 This function is a method for class \code{poisreg}. Compute the posterior predictive distribution and summary statistics for 

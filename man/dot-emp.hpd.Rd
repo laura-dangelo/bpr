@@ -11,9 +11,6 @@
 
 \item{conf}{probability}
 }
-\value{
-
-}
 \description{
 Compute HPD credible interval
 }

@@ -1,8 +1,7 @@
 #' Plot posterior check
 #' @description This function is a method for class \code{posterior_check}. Plot diagnostic statistics for graphical posterior predictive checks.
 #'
-#' @param object object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).
-#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in. Default is 0.25.
+#' @param x object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).
 #' @param ... other parameters to be passed through to plotting functions. See Details.
 #' 
 #' 
@@ -21,6 +20,9 @@
 #' This is done through the parameter \code{stats}: it is a list with elements the function names of the statistics one wants to compare. 
 #' Default is \code{stats = list("mean")}, other possible values are, e.g., "median", "sd", "max" etc.
 #' 
+#' @seealso 
+#' \code{\link{posterior_predictive.poisreg}}
+#' 
 #' @examples 
 #' library(MASS) # load the data set
 #' head(epil)
@@ -33,14 +35,17 @@
 #' 
 #' 
 #' @export
-plot.posterior_check = function(object, ...)
+#' @importFrom graphics abline hist legend lines mtext par polygon
+#' @importFrom stats dpois ecdf glm median model.matrix pnorm poisson rpois runif sd stepfun
+#' @importFrom grDevices devAskNewPage
+plot.posterior_check = function(x, ...)
 {
-  burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
+  burnin = 1: (x$perc_burnin * ncol(x$y_pred))
   
-  .plotECDF(object, burnin)
+  .plotECDF(x, burnin)
   devAskNewPage(ask = TRUE)
-  .plotHIST(object, burnin)
-  .plotSTAT(object, burnin, ...)
+  .plotHIST(x, burnin)
+  .plotSTAT(x, burnin, ...)
   devAskNewPage(ask = FALSE)
 }
 
@@ -87,7 +92,7 @@ plot.posterior_check = function(object, ...)
   par(mfrow = c(1,1))
 }
 
-.plotSTAT = function(object,  burnin, stats = c("mean"))
+.plotSTAT = function(object, burnin, stats = c("mean"))
 {
   if(length(stats) == 1){
     res = apply(object$y_pred[,-burnin], 2, function(y) do.call(stats, list(y)) )

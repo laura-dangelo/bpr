@@ -6,7 +6,6 @@
 #' the predictive distribution with new values of the explanatory variables.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
-#' @param perc_burnin (optional) percentage of each chain to be discarded as burn-in. Default is 0.25.
 #' @param new_X (optional) a data frame in which to look for variables with which to predict. 
 #'
 #' @return The call to this function returns an object of S3 class \code{posterior_check}. The object is a list with the following elements:
@@ -19,8 +18,9 @@
 #' \item{\code{new_X} : the provided matrix of explanatory variables; }
 #' \item{\code{y_newdata} : a matrix of dimension \code{[nrow(new_X), iter]}, each column is a draw from the posterior predictive distribution using \code{new_X};}
 #' \item{\code{y_MAP_newdata} : vector of length \code{nrow(new_X)} containing a draw from the posterior distribution obtained using the MAP estimate of the parameters, 
-#' computed on the new data \code{new_X}.}
-#' }
+#' computed on the new data \code{new_X}.} }
+#' @returns \code{perc_burnin} : the component from \code{object}.
+#' 
 #' @references 
 #' Gelfand, A., Dey, D. and Chang, H. (1992), Model determination using predictive distributions with implementation via sampling-based-methods (with discussion), 
 #' in ‘Bayesian Statistics 4’, University Press. \cr\cr
@@ -58,7 +58,7 @@ posterior_predictive.poisreg = function(object, new_X = NULL)
              "diagnostics" = list("CPO" = CPO, "LPML" = LPML),
              "newdata" = list( "new_X" = new_X, "y_newdata" = y_pred,
                                 "y_MAP_newdata" = y_meanpred),
-             "burnin" = object$burnin)
+             "perc_burnin" = object$perc_burnin)
     
   class(out) = "posterior_check"
   return(out)

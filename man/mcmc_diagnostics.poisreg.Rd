@@ -42,3 +42,7 @@ distribution. Values much larger than 1 suggest lack of convergence to a common 
 # For examples see example(sample_bpr)
 
 }
+\seealso{
+\code{\link{summary.poisreg}} , \code{\link{plot.poisreg}} ,
+\code{\link{merge_sim.poisreg}} , \code{\link[coda]{effectiveSize}} , \code{\link[coda]{geweke.diag}} , \code{\link[coda]{gelman.diag}}
+}

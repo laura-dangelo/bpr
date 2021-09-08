@@ -4,10 +4,12 @@
 \alias{summary.poisreg}
 \title{Summarizing Bayesian Poisson Regression Fit}
 \usage{
-\method{summary}{poisreg}(object)
+\method{summary}{poisreg}(object, ...)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
+
+\item{...}{further arguments passed to or from other methods.}
 }
 \value{
 \code{summary.poisreg} returns a list with elements:

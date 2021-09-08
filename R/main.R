@@ -42,10 +42,10 @@
 #' The function \code{\link{plot.poisreg}} prints the trace of the sampled values and a density estimate of the regression coefficients. 
 #' See \code{\link[coda]{plot.mcmc}}.\cr
 #' The function \code{\link{posterior_predictive.poisreg}} can be used to compute the posterior predictive distributions to check the model. 
-#' See also the related function \code{\link{plot.ppc}}.
+#' See also the related function \code{plot.ppc}.
 #'
-#' @seealso \code{\link{summary.poisreg}} , \code{\link{mcmc_diagnostics.poisreg}} , 
-#' \code{\link{merge.poisreg}} , \code{\link{posterior_predictive.poisreg}}
+#' @seealso \code{\link{summary.poisreg}} , \code{\link{mcmc_diagnostics.poisreg}} , \code{\link{plot.poisreg}} ,
+#' \code{\link{merge_sim.poisreg}} , \code{\link{posterior_predictive.poisreg}} 
 #' 
 #' @references 
 #' Carvalho, C., Polson, N., & Scott, J. (2010). The horseshoe estimator for sparse signals. Biometrika, 97(2), 465-480.\cr\cr
@@ -88,7 +88,7 @@
 #' # the Gelman-Rubin diagnostics confirms convergence of the 4 
 #' # independent chains to the same stationary distribution
 #' 
-#' fit4b = merge(fit4) 
+#' fit4b = merge_sim(fit4) 
 #' str(fit4b$sim)    
 #' # fit 4b contains only one MCMC chain of length 1500 
 #' # (after thinning and burn-in)

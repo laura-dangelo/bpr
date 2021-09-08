@@ -2,6 +2,7 @@
 #' @description This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
+#' @param ...  further arguments passed to or from other methods.
 #'  
 #' @details The printed output of \code{summary.poisreg} summarizes the main quantities of the fit. 
 #' The first component \code{Call} recaps the type of prior and algorithm used.
@@ -35,7 +36,7 @@
 #' 
 #' @export
 #' @importFrom coda effectiveSize
-summary.poisreg <- function(object) {
+summary.poisreg <- function(object, ...) {
   cat("\n")
   cat("Call: \n", "sample_poisreg( formula = ",  deparse(object$formula), 
       ", prior = ", object$prior,
@@ -75,19 +76,17 @@ summary.poisreg <- function(object) {
     totalit = nrow(object$sim$beta[-burnin,][th,])
     effSize = round(mean(effectiveSize(object$sim$beta[-burnin,][th,])))
     cat("Algorithm: \n")
-    if(is.null(object$burnin)) burnin = 1
-    if(is.null(object$burnin) | object$thin>1) cat(paste0(" Posterior estimates computed on ", totalit, " iterations after ", text_burnin, text_thin, ". \n"))
+    cat(paste0(" Posterior estimates computed on ", totalit, " iterations after ", text_burnin, text_thin, ". \n"))
     cat(paste0(" Mean effective sample size is equal to ", effSize, ". \n") )
-    cat(paste0(" Acceptance rate in ", nrow(object$sim$beta) - max(burnin)+1, " iterations is ", round(object$sim$acceptance_rate,4), ".") )
+    cat(paste0(" Acceptance rate is ", round(object$sim$acceptance_rate,4), ".") )
   }
   
   if(object$method == "Importance Sampler") 
   {
     effSize = round(sum(object$sim$w[-burnin][th])^2 / sum(object$sim$w[-burnin][th]^2) )
     cat("Algorithm: \n")
-    if(is.null(object$burnin)) burnin = 1
-    cat(paste0(" Posterior estimates computed discarding " , text_burnin, text_thin, ". \n"))
-    cat(paste0(" Mean effective sample size is equal to ", effSize, ".") )
+    cat(paste0(" Posterior estimates computed on ", totalit, " iterations after ", text_burnin, text_thin, ". \n"))
+    cat(paste0(" Effective sample size is equal to ", effSize, ".") )
   }
   
   out = list()

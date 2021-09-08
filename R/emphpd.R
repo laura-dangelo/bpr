@@ -2,8 +2,6 @@
 #'
 #' @param x vector
 #' @param conf probability
-#'
-#' @return
 #' @export
 #'
 .emp.hpd = function(x, conf=0.95){
