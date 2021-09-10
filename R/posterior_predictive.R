@@ -27,7 +27,7 @@
 #' Ibrahim, J. G., Chen, M.H. and Sinha, D. (2014), Bayesian Survival Analysis, American Cancer Society.
 #' 
 #' @export
-posterior_predictive.poisreg = function(object, new_X = NULL)
+posterior_predictive = function(object, new_X = NULL)
 {
   if(!is.null(new_X)){
     if( ncol(new_X) != ncol(object$data$X) ) stop("invalid dimension for new covariate matrix")}

@@ -28,7 +28,7 @@
 #' # (which is the result of concatenating the 4 simulations, after removing the first 25% 
 #' # iterations as burn-in and keeping one iteration every two).
 
-merge_sim.poisreg = function(object)
+merge_sim = function(object)
 {
   burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
   

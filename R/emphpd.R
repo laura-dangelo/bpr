@@ -1,9 +1,4 @@
-#' Compute HPD credible interval
-#'
-#' @param x vector
-#' @param conf probability
-#' @export
-#'
+#' @keywords internal
 .emp.hpd = function(x, conf=0.95){
   conf <- min(conf, 1-conf)
   n <- length(x)

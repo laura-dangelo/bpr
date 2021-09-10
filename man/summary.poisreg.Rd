@@ -2,14 +2,19 @@
 % Please edit documentation in R/summary.R
 \name{summary.poisreg}
 \alias{summary.poisreg}
+\alias{print.poisreg}
 \title{Summarizing Bayesian Poisson Regression Fit}
 \usage{
 \method{summary}{poisreg}(object, ...)
+
+\method{print}{poisreg}(x, ...)
 }
 \arguments{
 \item{object}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
 
 \item{...}{further arguments passed to or from other methods.}
+
+\item{x}{object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).}
 }
 \value{
 \code{summary.poisreg} returns a list with elements:

@@ -1,13 +1,11 @@
 Package: bpr
 Type: Package
-Title: What the Package Does Using Title Case
-Version: 1.0
+Title: Fitting Bayesian Poisson Regression
+Version: 0.1
 Date: 2021-09-04
-Author: Your Name
-Maintainer: Your Name <your@email.com>
-Description: More details about what the package does. See
-        <http://cran.r-project.org/doc/manuals/r-release/R-exts.html#The-DESCRIPTION-file>
-        for details on how to write this part.
+Author: Laura D'Angelo
+Maintainer: Laura D'Angelo <laura.dangelo@live.com>
+Description: Posterior sampling and inference for Bayesian Poisson regression models. The model specification makes use of Gaussian (or conditionally Gaussian) prior distributions on the regression coefficients. 
 License: GPL (>= 2)
 Encoding: UTF-8
 RoxygenNote: 7.1.1

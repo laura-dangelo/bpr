@@ -1,7 +1,7 @@
-#' Plot posterior check
+#' Graphical Posterior Predictive Checks
 #' @description This function is a method for class \code{posterior_check}. Plot diagnostic statistics for graphical posterior predictive checks.
 #'
-#' @param x object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).
+#' @param x object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive}}).
 #' @param ... other parameters to be passed through to plotting functions. See Details.
 #' 
 #' 
@@ -21,7 +21,7 @@
 #' Default is \code{stats = list("mean")}, other possible values are, e.g., "median", "sd", "max" etc.
 #' 
 #' @seealso 
-#' \code{\link{posterior_predictive.poisreg}}
+#' \code{\link{posterior_predictive}}
 #' 
 #' @examples 
 #' library(MASS) # load the data set
@@ -29,8 +29,7 @@
 #' 
 #' fit = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
 #'                    iter = 1000)
-#' 
-#' plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   
+#' \donttest{ plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   }
 #' # plots for posterior predictive check
 #' 
 #' 

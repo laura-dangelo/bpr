@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_ppc.R
 \name{plot.posterior_check}
 \alias{plot.posterior_check}
-\title{Plot posterior check}
+\title{Graphical Posterior Predictive Checks}
 \usage{
 \method{plot}{posterior_check}(x, ...)
 }
 \arguments{
-\item{x}{object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive.poisreg}}).}
+\item{x}{object of class "\code{posterior_check}" (usually, the result of a call to \code{\link{posterior_predictive}}).}
 
 \item{...}{other parameters to be passed through to plotting functions. See Details.}
 }
@@ -34,12 +34,11 @@ head(epil)
 
 fit = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
                    iter = 1000)
-
-plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   
+\donttest{ plot(posterior_predictive(fit), stats = c("mean", "sd", "max"))   }
 # plots for posterior predictive check
 
 
 }
 \seealso{
-\code{\link{posterior_predictive.poisreg}}
+\code{\link{posterior_predictive}}
 }

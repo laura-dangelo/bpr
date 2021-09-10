@@ -2,6 +2,7 @@
 #' @description This function is a method for class \code{poisreg}. It prints summary statistics and returns posterior estimates of regression quantities.
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
+#' @param x object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
 #' @param ...  further arguments passed to or from other methods.
 #'  
 #' @details The printed output of \code{summary.poisreg} summarizes the main quantities of the fit. 
@@ -104,3 +105,9 @@ summary.poisreg <- function(object, ...) {
 }
 
 
+#' @rdname summary.poisreg
+#' @export
+print.poisreg <- function(x, ...)
+{
+  summary.poisreg(object = x, ...)
+}

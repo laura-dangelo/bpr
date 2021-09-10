@@ -1,4 +1,4 @@
-#' @export
+#' @keywords internal
 #' @import Rcpp
 .sampling = function(formula, data, y, X,
                     iter, burnin,
@@ -12,7 +12,6 @@
   {
     if(prior$type == "gaussian")
     {
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       if(!is.null(seed)) set.seed(seed)
       start = Sys.time()
@@ -28,7 +27,6 @@
     }
     else if(prior$type == "horseshoe")
     {
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       start = Sys.time()
       run <- .ISPolya_horseshoe(iter, 
@@ -61,7 +59,6 @@
   {
     if( is.null(burnin) )
     {
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       if(!is.null(seed)) set.seed(seed)
       start = Sys.time()
@@ -79,7 +76,6 @@
     {
       if( !is.numeric(burnin) | (burnin < 1) | (burnin > iter) | (round(burnin)!=burnin) ) {stop("parameter burnin must be a positive integer < iter"); error = 1}
       
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       if(!is.null(seed)) set.seed(seed)
       start = Sys.time()
@@ -103,7 +99,6 @@
   {
     if( is.null(burnin) )
     {
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       if(!is.null(seed)) set.seed(seed)
       start = Sys.time()
@@ -122,7 +117,6 @@
     {
       if( !is.numeric(burnin) | (burnin < 1) | (burnin > iter) | (round(burnin)!=burnin) ) {stop("parameter burnin must be a positive integer < iter"); error = 1}
       
-      if(verbose == TRUE) cat("Loading source code ... \n\n")
       if(verbose == TRUE) cat(paste0(cat(paste0("Sampling ", iter, " iterations \n\n"))))
       if(!is.null(seed)) set.seed(seed)
       start = Sys.time()

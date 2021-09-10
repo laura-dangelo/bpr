@@ -9,4 +9,3 @@ plot.poisreg = function(x, ...)
 {
   plot(x$sim$beta, ...)
 }
-  

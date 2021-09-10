@@ -3,7 +3,7 @@
 #'
 #' @param object object of class "\code{poisreg}" (usually, the result of a call to \code{\link{sample_bpr}}).
 #'
-#' @details The printed output of \code{mcmc_diagnostics.poisreg} summarizes some common convergence diagnostics for Markov chains. 
+#' @details The printed output of \code{mcmc_diagnostics} summarizes some common convergence diagnostics for Markov chains. 
 #' The first part recaps the total length, burn-in and thinning used for the simulation.
 #' 
 #' The second part is a table with diagnostic statistics about each chain of the regression parameters. The first column is 
@@ -13,7 +13,7 @@
 #' The last part is printed only if multiple chains are computed. In this case, it reports the Gelman-Rubin statistics to test convergence to the same stationary  
 #' distribution. Values much larger than 1 suggest lack of convergence to a common distribution.
 #'
-#' @return \code{mcmc_diagnostics.poisreg} returns a list with elements:
+#' @return \code{mcmc_diagnostics} returns a list with elements:
 #' @returns \code{chain_length} : total length of the MCMC chains.
 #' @returns \code{len_burnin} : the length of the burn-in used to compute the estimates.
 #' @returns \code{thin} : the thinning frequency used (from \code{object}).
@@ -22,13 +22,13 @@
 #' @returns \code{gelman_rubin} : if \code{nchains > 1}, Gelman-Rubin diagnostics of convergence. See \code{\link[coda]{gelman.diag}}.
 #'
 #' @seealso \code{\link{summary.poisreg}} , \code{\link{plot.poisreg}} ,
-#' \code{\link{merge_sim.poisreg}} , \code{\link[coda]{effectiveSize}} , \code{\link[coda]{geweke.diag}} , \code{\link[coda]{gelman.diag}}
+#' \code{\link{merge_sim}} , \code{\link[coda]{effectiveSize}} , \code{\link[coda]{geweke.diag}} , \code{\link[coda]{gelman.diag}}
 #' @examples 
 #' # For examples see example(sample_bpr)
 #' 
 #' @export
 #' @importFrom coda effectiveSize geweke.diag gelman.diag
-mcmc_diagnostics.poisreg = function(object)
+mcmc_diagnostics = function(object)
 {
   burnin = 1: (object$perc_burnin * nrow(object$sim$beta))
   th = seq(from = 1, to = nrow(object$sim$beta[-burnin,]), by = object$thin)

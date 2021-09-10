@@ -1,15 +1,35 @@
 #' Fitting Bayesian Poisson Regression
-#' @description \code{sample_bpr} is used to generate draws from the posterior distribution of the coefficients of Poisson regression models. 
+#' @description The function generates draws from the posterior distribution of the coefficients of Poisson regression models. 
 #' The method allows for Gaussian and horseshoe (Carvalho et al, 2010) prior distributions, 
-#' and relies on a Metropolis-Hastings or importance sampler algorithm. See D'Angelo and Canale (2021) for details on the algorithms.
+#' and relies on a Metropolis-Hastings or importance sampler algorithm. 
 #'
 #' @param formula an object of class "formula": a symbolic description of the model to be fitted. 
 #' @param data data frame or matrix containing the variables in the model.
 #' @param iter number of algorithm iterations.
 #' @param burnin (optional) a positive integer specifying the length of the burn-in. 
 #' If a value > 1 is provided, the first \code{burnin} iterations use a different tuning parameter in order to better explore the parameter space.
-#' @param prior a named list of parameters to select prior type and parameters. See the details for the \code{prior} arguments.
-#' @param pars a named list of parameters to select algorithm type and tuning parameters. See the details for the \code{pars} arguments.
+#' @param prior a named list of parameters to select prior type and parameters, with arguments:
+#' \itemize{
+#' \item \code{type} : string specifying whether an informative Gaussian (\code{"gaussian"}) or a horseshoe (\code{"horseshoe"}) prior should be used. 
+#' Default is \code{"gaussian"}.
+#' \item \code{b, B} : (optional) if a Gaussian prior is used, the mean and covariance matrix passed as prior parameters. 
+#' If not specified, the prior on the regression parameters is centered at zero, with independent N(0,2) components.
+#' \item \code{tau} : if a horseshoe prior is used, the global shrinkage parameter tau has to be fixed. 
+#' This can be seen as an empirical Bayes approach, and allows to speed convergence and avoid potential convergence issues that often occur when it is sampled.
+#' In general, the parameter can be interpreted as a measure of sparsity, and it should be fixed to small values. See van der Pas et al. (2017) for a discussion.
+#' }
+#' 
+#' @param pars a named list of parameters to select algorithm type and tuning parameters, with arguments:
+#' \itemize{
+#' \item \code{method} : the type of algorithm used. Default is a Metropolis-Hastings algorithm (\code{"MH"}), 
+#' the alternative is an importance sampler algorithm (\code{"IS"}).
+#' \item \code{max_dist} : tuning parameter controlling the "distance" of the approximation to the true target posterior. 
+#' For the Metropolis-Hastings algorithm, it can be used to balance acceptance rate and autocorrelation of the chains. 
+#' As a general indication, larger values are needed for increasing size/dimension of the data to obtain good results.
+#' #' \item \code{max_r} : (optional) additional tuning parameter which sets an upper bound for the parameters r controlling the approximation.
+#' \item \code{max_dist_burnin} : if \code{burnin} is specified, the tuning parameter used for the first part of the chain. 
+#' A very large value is sometimes useful to explore the parameter space (especially if the chains are initialized very far from their stationary distribution).
+#' }
 #' @param state optional vector providing the starting points of the chains.
 #' @param thin a positive integer specifying the period for saving samples. The default is 1.
 #' @param verbose logical (default = TRUE) indicating whether to print messages on the progress of the algorithm and possible convergence issues.
@@ -36,20 +56,34 @@
 #' @returns \code{perc_burnin} : percentage of the chain used as burn-in.
 #' 
 #' @details 
-#' An object of class \code{poisreg} admits class-specific methods to analyze the output.\cr
+#' This function fits a Bayesian Poisson regression model with Gaussian prior distributions on the regression coefficients:
+#' \deqn{ Y ~ Poisson(\lambda) , \lambda = exp{X \beta} }
+#' where \eqn{Y} is a size \eqn{n} vector of counts and \eqn{X} is a \eqn{n x p} matrix of coefficients; and \eqn{(\beta | - )} 
+#' has a Gaussian distribution (possibly conditionally on some parameters).
+#' 
+#' Specifically, the function allows for informative Gaussian prior distribution on the parameters, 
+#' i.e. \eqn{(\beta_1,...,\beta_p) ~ N_p(b, B)}, and for a horseshoe prior distribution (Carvalho et al, 2010). 
+#' The horseshoe prior is a scale mixture of normals, which is typically used in high-dimension settings to induce sparsity and
+#' regularization of the coefficients.
+#' 
+#' The implemented Metropolis-Hastings and importance sampler exploit as proposal density a multivariate Gaussian approximation of the 
+#' posterior distribution. Such proposal is based on the convergence of the negative binomial distribution to the Poisson distribution and on
+#' the Polya-gamma data augmentation of Polson et al. (2013).
+#' 
+#' The output of the sampling is an object of class \code{poisreg} and admits class-specific methods to perform inference.\cr
 #' The function \code{\link{summary.poisreg}} can be used to obtain or print a summary of the results and of the algorithm diagnostics. \cr
-#' The function \code{\link{mcmc_diagnostics.poisreg}} can be used to obtain or print convergence diagnostics for the sampled chains.  \cr
+#' The function \code{\link{mcmc_diagnostics}} can be used to obtain or print convergence diagnostics for the sampled chains.  \cr
 #' The function \code{\link{plot.poisreg}} prints the trace of the sampled values and a density estimate of the regression coefficients. 
 #' See \code{\link[coda]{plot.mcmc}}.\cr
-#' The function \code{\link{posterior_predictive.poisreg}} can be used to compute the posterior predictive distributions to check the model. 
+#' The function \code{\link{posterior_predictive}} can be used to compute the posterior predictive distributions to check the model. 
 #' See also the related function \code{plot.ppc}.
 #'
-#' @seealso \code{\link{summary.poisreg}} , \code{\link{mcmc_diagnostics.poisreg}} , \code{\link{plot.poisreg}} ,
-#' \code{\link{merge_sim.poisreg}} , \code{\link{posterior_predictive.poisreg}} 
+#' @seealso \code{\link{summary.poisreg}} , \code{\link{mcmc_diagnostics}} , \code{\link{plot.poisreg}} ,
+#' \code{\link{merge_sim}} , \code{\link{posterior_predictive}} 
 #' 
 #' @references 
 #' Carvalho, C., Polson, N., & Scott, J. (2010). The horseshoe estimator for sparse signals. Biometrika, 97(2), 465-480.\cr\cr
-#' D'Angelo, L., and Canale, A. (2021) Efficient posterior sampling for Bayesian Poisson regression. arXiv...
+#' van der Pas, S., Szabo, B. and van der Vaart, A. (2017), Adaptive posterior contractionrates for the horseshoe, Electronic Journal of Statistics, 11(2), 3196-3225.
 #'
 #' @examples 
 #' require(MASS) # load the data set
@@ -72,26 +106,44 @@
 #'                                   B = diag(6) * 3 ),
 #'                     pars = list( max_dist = 10 ))
 #'                     
-#' # Horseshoe prior, with global shrinkage parameter equal to 1
+#' # Simulate multiple chains and merge outputs after checking convergence
 #' fit3 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
 #'                     iter = 1000, 
-#'                     prior = list( type = "horseshoe", tau = 1 ),
-#'                     pars = list( max_dist = 10 ))     
-#'                     
-#' # Simulate multiple chains and merge outputs after checking convergence
-#' fit4 = sample_bpr( y ~  lbase*trt + lage + V4, data = epil, 
-#'                     iter = 1000, 
 #'                     nchains = 4, thin = 2)
-#' # fit now contains additional elements ($sim2, $sim3, $sim4)
+#' # fit3 now contains additional elements ($sim2, $sim3, $sim4)
 #' 
-#' mcmc_diagnostics(fit4)     
+#' mcmc_diagnostics(fit3)     
 #' # the Gelman-Rubin diagnostics confirms convergence of the 4 
 #' # independent chains to the same stationary distribution
 #' 
-#' fit4b = merge_sim(fit4) 
-#' str(fit4b$sim)    
-#' # fit 4b contains only one MCMC chain of length 1500 
+#' fit3b = merge_sim(fit3) 
+#' str(fit3b$sim)    
+#' # fit 3b contains only one MCMC chain of length 1500 
 #' # (after thinning and burn-in)
+#' 
+#' \dontrun{
+#' ## introduce more variables and use regularization
+#' epil2 <- epil[epil$period == 1, ]
+#' epil2["period"] <- rep(0, 59); epil2["y"] <- epil2["base"]
+#' epil["time"] <- 1; epil2["time"] <- 4
+#' epil2 <- rbind(epil, epil2)
+#' epil2$pred <- unclass(epil2$trt) * (epil2$period > 0) 
+#' epil2$subject <- factor(epil2$subject)
+#' epil3 <- aggregate(epil2, list(epil2$subject, epil2$period > 0),
+#'                    function(x) if(is.numeric(x)) sum(x) else x[1])
+#'                    epil3$pred <- factor(epil3$pred,
+#'                    labels = c("base", "placebo", "drug"))
+#' contrasts(epil3$pred) <- structure(contr.sdif(3),
+#'                          dimnames = list(NULL, c("placebo-base", "drug-placebo")))
+#'                          
+#' fit4 = sample_bpr(y ~ pred + factor(subject), data = epil3,
+#'                 pars = list(max_dist = 0.3),
+#'                 prior = list(type = "horseshoe", tau = 2),
+#'                 iter = 3000, burnin = 1000)
+#' summary(fit4)
+#' mcmc_diagnostics(fit4)
+#' plot(posterior_predictive(fit4), stats = c("mean", "sd", "max"))
+#' }
 #' 
 #' @export
 #' @importFrom coda as.mcmc
