@@ -2,6 +2,7 @@
 #define COMMONFUNCTIONS_H
 
 #include <RcppArmadillo.h>
+#include <boost/math/special_functions/lambert_w.hpp>
 
 double Mahalanobis(arma::vec x, arma::vec center, arma::mat cov);
 

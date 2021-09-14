@@ -7,7 +7,7 @@
 using boost::math::lambert_w0;
 
 // [[Rcpp::depends(RcppArmadillo)]]
-
+// [[Rcpp::depends(BH)]]
 
 // Multivariate normal density
 double Mahalanobis(arma::vec x, arma::vec center, arma::mat cov) {
@@ -31,7 +31,7 @@ double dmvnorm_arma(arma::vec x, arma::vec mean, arma::mat sigma, bool log = fal
 // factorial function
 double logfactorial(int M){
   double fact = 0;
-  if(M == 1 | M == 0) return 0;
+  if((M == 1) | (M == 0)) return 0;
   for(int l = 1; l <= M; l++ ){
     fact += std::log(l);
   }
