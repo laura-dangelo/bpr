@@ -4,8 +4,8 @@ This tutorial is a short guide on the use of the `bpr` package to perform poster
 
 ### Model specification
 First, we briefly recall the model specification and prior distributions available in the package.
-The general setting is that of standard Poisson regression models, where the interest is to regress a vector of counts $y$, of size $n$, on an $n \times p$ matrix $p$ of covariates:
-$ y_i \sim \text{Poisson}(\lambda_i) $
-$ \lambda_i = \exp \{ x_i^T\beta \} $
+The general setting is that of standard Poisson regression models, where the interest is to regress a vector of counts *y*, of size *n*, on an *n x p* matrix *X* of covariates:
 
+y ~ Poisson(lambda); lambda = exp{ X * beta }
 
+where *beta* is the *p x 1* vector of regression coefficients.
