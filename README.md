@@ -18,4 +18,4 @@ Download the tarball archive "bpr_1.0.tar.gz". In R, run
 install.packages("path/to/bpr_1.0.tar.gz", repos = NULL, source = TRUE)
 ```
 
-The package requires Rcpp, RcppArmadillo and C++ library Boost.
+The package requires [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html#:~:text=The%20'Rcpp'%20package%20provides%20R,integration%20of%20third%2Dparty%20libraries.), [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) and the C++ library [boost](https://www.boost.org/).
