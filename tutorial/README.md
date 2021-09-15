@@ -69,6 +69,7 @@ For example, to see the acceptance rate of the sampling, it is possible to simpl
 fit$sim$acceptance_rate
    ## [1] 0.491
 ```
+Keeping the acceptance rate around 0.3-0.5 is a good choice, that well balances the autocorrelation of the sampled values (and thus the effective sample size).
 
 
 A more informative output is produced using the function `summary()`. Applied to an object of class `poisreg`, it prints a summary of the main quantities of the fit: the first component `Call` recaps the type of prior and algorithm used.
@@ -97,8 +98,13 @@ summary(fit)
    ##  Mean effective sample size is equal to 225. 
    ##  Acceptance rate is 0.491.
 ```
+In this case, we see that all regression coefficients are useful, as none of the credible intervals contains zero.
+Moreover, these estimates are computed based on 225 effectively independent draws, after discarding the first 250 iterations as burn-in and considering the autocorrelation of the chain.
 
-To obtain MCMC diagnostics of convergence it is possible to use the function `mcmc_diagnostics()`: it computes the Geweke diagnostics to test equality of the means of the first and last part of the chains. If multiple chains are sampled, it also reports additional diagnostic tools (see ).
+
+To obtain MCMC diagnostics of convergence it is possible to use the function `mcmc_diagnostics()`: it computes the effective sample size of each chain (first column) and the Geweke diagnostics to test equality of the means of the first and last part of the chains. 
+The test statistic is a standard Z-score (second column), and the last column reports the observed p-value.
+If multiple chains are sampled, it also reports additional diagnostic tools (see tutorial "MCMC parameters").
 
 ```r
 mcmc_diagnostics(fit)
