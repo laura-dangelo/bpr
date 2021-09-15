@@ -1,4 +1,5 @@
-## `bpr` tutorial
+# `bpr` tutorial
+## Basic usage
 
 This tutorial is a short guide on the use of the `bpr` package to perform posterior sampling and inference on the parameters of Bayesian Poisson regression models.
 
@@ -97,7 +98,7 @@ summary(fit)
    ##  Acceptance rate is 0.491.
 ```
 
-To obtain MCMC diagnostics of convergence it is possible to use the function `mcmc_diagnostics()`: it computes the Geweke diagnostics to test equality of the means of the first and last part of the chains. If multiple chains are sampled, it also reports additional diagnostic tools.
+To obtain MCMC diagnostics of convergence it is possible to use the function `mcmc_diagnostics()`: it computes the Geweke diagnostics to test equality of the means of the first and last part of the chains. If multiple chains are sampled, it also reports additional diagnostic tools (see ).
 
 ```r
 mcmc_diagnostics(fit)
