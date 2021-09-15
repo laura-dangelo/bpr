@@ -7,7 +7,7 @@ First, we briefly recall the model specification and prior distributions availab
 The general setting is that of standard Poisson regression models, where the interest is to regress a vector of counts *y*, of length *n*, on an *n x p* matrix *X* of covariates:
 
 <p align="center">
-y ~ Poisson(λ)
+y ~ Poisson( λ )
 </p> <p align="center">
 λ = exp{ X * β }
 </p>
@@ -16,15 +16,15 @@ where β is a length-*p* vector of regression coefficients, and λ is the linear
 
 On the regression coefficients we place conditionally Gaussian prior distributions: we assume that, conditionally on the mean vector *b* and covariance matrix *B*,
 <p align="center">
-(β | b, B) ~ N(b,B).
+( β | b, B ) ~ N( b, B ).
 </p>
 
 Implemented in this package are a straightforward Gaussian prior distribution with informative *(b,B)* fixed using prior information, and the horseshoe prior of Carvalho et al. (2010).
 The horseshoe prior is a scale mixture of Gaussians where *b* is set to zero and the variance has a hierarchical representation:
 <p align="center">
-(β<sub>j</sub> | η<sub>j</sub><sup>2</sup>,τ<sup>2</sup>) ~ N(0,η<sup>2</sup>τ<sup>2</sup>)
+(β<sub>j</sub> | η<sub>j</sub><sup>2</sup>, τ<sup>2</sup>) ~ N( 0, η<sup>2</sup> τ<sup>2</sup> )
 </p><p align="center">
-η ~ C+(0,1),   `    `            τ ~ C+(0,1)
+η ~ C+( 0, 1 ),                 τ ~ C+( 0, 1 )
 </p>
 
 
