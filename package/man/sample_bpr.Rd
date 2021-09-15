@@ -157,7 +157,7 @@ str(fit3b$sim)
 # fit 3b contains only one MCMC chain of length 1500 
 # (after thinning and burn-in)
 
-\dontrun{
+\donttest{
 ## introduce more variables and use regularization
 epil2 <- epil[epil$period == 1, ]
 epil2["period"] <- rep(0, 59); epil2["y"] <- epil2["base"]

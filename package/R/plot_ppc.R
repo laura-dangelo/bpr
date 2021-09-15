@@ -41,6 +41,9 @@ plot.posterior_check = function(x, ...)
 {
   burnin = 1: (x$perc_burnin * ncol(x$y_pred))
   
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
+  
   .plotECDF(x, burnin)
   devAskNewPage(ask = TRUE)
   .plotHIST(x, burnin)
@@ -50,6 +53,7 @@ plot.posterior_check = function(x, ...)
 
 .plotECDF = function(object, burnin)
 {
+  par(mfrow = c(1,1))
   seqq = sort(unique(c(0,object$y_pred[,-burnin],object$data$y)))
   ecdfseq = apply( object$y_pred[,-burnin], 2, function(yy) sapply(seqq, function(x) ecdf(yy)(x) ) ) 
   
@@ -86,9 +90,9 @@ plot.posterior_check = function(x, ...)
 .plotHIST = function(object, burnin)
 {
   par(mfrow = c(1,2))
+  
   hist(object$data$y, main = "Observed y", xlab = "y")
   hist(object$y_MAP_pred, main = "MAP predictive distribution", xlab = "y")
-  par(mfrow = c(1,1))
 }
 
 .plotSTAT = function(object, burnin, stats = c("mean"))

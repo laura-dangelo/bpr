@@ -11,9 +11,12 @@
 
 \item{...}{further arguments passed to or from other methods.}
 }
+\value{
+The function calls \code{\link[coda]{plot.mcmc}} on the matrix of sampled regression coefficients, and returns the trace of the sampled outputs and a density estimate for each variable in the chain.
+}
 \description{
 Plot Trace and Distribution of Regression Parameters
 }
 \seealso{
-\code{\link{sample_bpr}}
+\code{\link{sample_bpr}}, \code{\link[coda]{plot.mcmc}}
 }
