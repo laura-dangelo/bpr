@@ -70,7 +70,10 @@ fit$sim$acceptance_rate
 ```
 
 
-A more informative output is produced using the function `summary()`. Applied to an object of class `poisreg`, it produces the following output
+A more informative output is produced using the function `summary()`. Applied to an object of class `poisreg`, it prints a summary of the main quantities of the fit: the first component `Call` recaps the type of prior and algorithm used.
+`Coefficients` is a table of estimated quantities for the regression parameters. The first three columns report the estimated posterior mean, standard errors and medians. The last two columns correspond to the lower and upper bounds of the 0.95 credible intervals.
+`Algorithm` briefly summarizes the main convergence diagnostics and efficiency of the algorithm. 
+
 ```r
 summary(fit)
 
@@ -94,6 +97,24 @@ summary(fit)
    ##  Acceptance rate is 0.491.
 ```
 
+To obtain MCMC diagnostics of convergence it is possible to use the function `mcmc_diagnostics()`: it computes the Geweke diagnostics to test equality of the means of the first and last part of the chains. If multiple chains are sampled, it also reports additional diagnostic tools.
+
+```r
+mcmc_diagnostics(fit)
+
+   ## Total chains length = 1000 
+   ## Discarding the first 250 iterations as burnin 
+   ## Thinning frequency = 1 
+   ## 
+   ## MCMC Diagnostics: 
+   ##                    Eff. Size Geweke test Pr(>|z|)
+   ## (Intercept)           212.52      -0.511     0.61
+   ## lbase                 243.07       0.974     0.33
+   ## trtprogabide          236.12       0.122     0.90
+   ## lage                  291.59      -1.567     0.12
+   ## V4                    222.66       0.257     0.80
+   ## lbase:trtprogabide    145.88       1.344     0.18
+```
 
 
 
