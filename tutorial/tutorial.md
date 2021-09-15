@@ -8,7 +8,7 @@ The general setting is that of standard Poisson regression models, where the int
 
 <p align="center">
 y ~ Poisson(β)
-
+</p> <p align="center">
 λ = exp{ X * β }
 </p>
 
@@ -22,9 +22,9 @@ On the regression coefficients we place conditionally Gaussian prior distributio
 Implemented in this package are a straightforward Gaussian prior distribution with informative *(b,B)* fixed using prior information, and the horseshoe prior of Carvalho et al. (2010).
 The horseshoe prior is a scale mixture of Gaussians where *b* is set to zero and the variance has a hierarchical representation:
 <p align="center">
-(β<sub>j</sub> | η<sup>2</sup><sub>j</sub>,τ<sup>2</sup>) ~ N(0,η<sup>2</sup>τ<sup>2</sup>)
+(β<sub>j</sub> | η<sub>j</sub><sup>2</sup>,τ<sup>2</sup>) ~ N(0,η<sup>2</sup>τ<sup>2</sup>)
 
-η ~ C+(0,1),  τ ~ C+(0,1)
+η ~ C+(0,1),                 τ ~ C+(0,1)
 </p>
 
 
