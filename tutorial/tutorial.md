@@ -35,8 +35,7 @@ library(bpr)
 library(MASS)
 
 head(epil)
-```
-```
+
    ##   y     trt base age V4 subject period      lbase       lage
    ##   5 placebo   11  31  0       1      1 -0.7563538 0.11420370
    ##   3 placebo   11  31  0       1      2 -0.7563538 0.11420370
@@ -48,10 +47,9 @@ head(epil)
 
 #### Model 1: Metropolis-Hastings algorithm with Gaussian priors
 A minimal call only requires to specify the data and number of MCMC iterations.
-Calling the main function `sample_bpr()` with the default parameters will implement a Metropolis-Hastings algorithm with tuning parameter `max_dist` equal to 50, and with independent *N(0,2)* prior distributions on the regression parameters.
+Calling the main function `sample_bpr()` with the default parameters will implement a Metropolis-Hastings algorithm with tuning parameter `max_dist = 50`, and with independent *N(0,2)* prior distributions on the regression parameters.
 ```r
-fit = sample_bpr( y ~ lbase * trt + lage + V4, data = epil, 
-                    iter = 1000)
+fit = sample_bpr( y ~ lbase * trt + lage + V4, data = epil, iter = 1000)
 ```
 if `verbose = TRUE` (default) the call will produce a very synthetic output:
 ```
@@ -64,6 +62,37 @@ if `verbose = TRUE` (default) the call will produce a very synthetic output:
 ```
    
 If there are important issues with the algorithm performance (such as acceptance rate equal to 0), a warning message is also printed.
+The function `sample_bpr()` returns an object of class `poisreg`, which is a named list containing several useful quantities. The most important is `fit$sim`, which, in turn, is a list and contains the sampled values `$beta`, the adaptive tuning paramters `$r`, the acceptance rate `$acceptance_rate`, and the total computing time `$time`.
+For example, to see the acceptance rate of the sampling, it is possible to simply call
+```r
+fit$sim$acceptance_rate
+   ## [1] 0.491
+```
+
+
+A more informative output is produced using the function `summary()`. Applied to an object of class `poisreg`, it produces the following output
+```r
+summary(fit)
+
+   ## Call: 
+   ##  sample_poisreg( formula =  y ~ lbase * trt + lage + V4 , prior =  gaussian , algorithm =  Metropolis-Hastings ) 
+   ## 
+   ## Coefficients: 
+   ##                        Mean Std. Error   Median Lower CI Upper CI  
+   ## (Intercept)         1.89542   0.044185  1.89556    1.815   1.9832 *
+   ## lbase               0.94846   0.041872  0.94985    0.879   1.0372 *
+   ## trtprogabide       -0.34644   0.061799 -0.34488   -0.459  -0.2232 *
+   ## lage                0.88452   0.121447  0.89023    0.673   1.1527 *
+   ## V4                 -0.15840   0.052604 -0.15221   -0.253  -0.0576 *
+   ## lbase:trtprogabide  0.56282   0.063455  0.56279    0.451   0.6864 *
+   ## --- 
+   ##  '*' if 95% credible interval does not include zero. 
+   ##  
+   ## Algorithm: 
+   ##  Posterior estimates computed on 750 iterations after discarding the first 250 iterations as burn-in. 
+   ##  Mean effective sample size is equal to 225. 
+   ##  Acceptance rate is 0.491.
+```
 
 
 
