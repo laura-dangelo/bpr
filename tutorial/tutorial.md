@@ -36,6 +36,7 @@ library(MASS)
 
 head(epil)
 ```
+```
    ##   y     trt base age V4 subject period      lbase       lage
    ##   5 placebo   11  31  0       1      1 -0.7563538 0.11420370
    ##   3 placebo   11  31  0       1      2 -0.7563538 0.11420370
@@ -43,6 +44,7 @@ head(epil)
    ##   3 placebo   11  31  1       1      4 -0.7563538 0.11420370
    ##   3 placebo   11  30  0       2      1 -0.7563538 0.08141387
    ##   5 placebo   11  30  0       2      2 -0.7563538 0.0814138
+```
 
 #### Model 1: Metropolis-Hastings algorithm with Gaussian priors
 A minimal call only requires to specify the data and number of MCMC iterations.
@@ -52,12 +54,14 @@ fit = sample_bpr( y ~ lbase * trt + lage + V4, data = epil,
                     iter = 1000)
 ```
 if `verbose = TRUE` (default) the call will produce a very synthetic output:
+```
    ## Running MH sampler with a gaussian prior distribution.
    ## Chains initialized at the maximum likelihood estimates.
    ##
    ## Sampling 1000 iterations 
    ##
    ## Sampling completed in 0.114 secs
+```
    
 If there are important issues with the algorithm performance (such as acceptance rate equal to 0), a warning message is also printed.
 
