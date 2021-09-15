@@ -29,9 +29,9 @@ The horseshoe prior is a scale mixture of Gaussians where *b* is set to zero and
 </p>
 
 
-### Example
+### Basic example: Metropolis-Hastings algorithm with Gaussian priors
 We use the `epil` data set from the `MASS` library, containing seizure counts for 59 epileptics.
-```{r}
+```r
 library(bpr)
 library(MASS)
 
@@ -46,14 +46,14 @@ head(epil)
    ##   5 placebo   11  30  0       2      2 -0.7563538 0.0814138
 ```
 
-#### Model 1: Metropolis-Hastings algorithm with Gaussian priors
+
 A minimal call only requires to specify the data and number of MCMC iterations.
 Calling the main function `sample_bpr()` with the default parameters will implement a Metropolis-Hastings algorithm with tuning parameter `max_dist = 50`, and with independent *N(0,2)* prior distributions on the regression parameters.
 ```r
 fit = sample_bpr( y ~ lbase * trt + lage + V4, data = epil, iter = 1000)
 ```
 if `verbose = TRUE` (default) the call will produce a very synthetic output:
-```
+```r
    ## Running MH sampler with a gaussian prior distribution.
    ## Chains initialized at the maximum likelihood estimates.
    ##
@@ -72,6 +72,7 @@ fit$sim$acceptance_rate
 Keeping the acceptance rate around 0.3-0.5 is a good choice, that well balances the autocorrelation of the sampled values (and thus the effective sample size).
 
 
+#### Inference summary
 A more informative output is produced using the function `summary()`. Applied to an object of class `poisreg`, it prints a summary of the main quantities of the fit: the first component `Call` recaps the type of prior and algorithm used.
 `Coefficients` is a table of estimated quantities for the regression parameters. The first three columns report the estimated posterior mean, standard errors and medians. The last two columns correspond to the lower and upper bounds of the 0.95 credible intervals.
 `Algorithm` briefly summarizes the main convergence diagnostics and efficiency of the algorithm. 
@@ -106,6 +107,7 @@ To obtain MCMC diagnostics of convergence it is possible to use the function `mc
 The test statistic is a standard Z-score (second column), and the last column reports the observed p-value.
 If multiple chains are sampled, it also reports additional diagnostic tools (see tutorial "MCMC parameters").
 
+#### MCMC diagnostics
 ```r
 mcmc_diagnostics(fit)
 
@@ -122,9 +124,19 @@ mcmc_diagnostics(fit)
    ## V4                    222.66       0.257     0.80
    ## lbase:trtprogabide    145.88       1.344     0.18
 ```
+Visual inspection of convergence can be performed also using the `plot()` function: calling
+```r
+plot(fit)
+```
+will produce trace-plots of the sampled outputs and a density estimate for each variable in the chain. The function calls the `coda::plot.mcmc()` function applied on the `fit$sim` object (which is a `coda::as.mcmc` object).
 
 
-
+#### Posterior predictive check
+Finally, an important step is evaluating the fit of the model to the data. This can be done through the posterior predictive distribution.
+The posterior predictive distribution can be computed with the function `posterior_predictive()` applied to a `poisreg` object. The results can be used in several ways to check the goodness of the model; alternatively, a more automatic way is to call the `plot` function on the output, which produces (at least) three different plots for a graphical posterior check.
+```r
+plot(posterior_predictive(fit), stats = c("mean", "max"))
+```
 
 
 
