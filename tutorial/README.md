@@ -141,10 +141,12 @@ For this last plot, it is possible to choose what statistics we want to analyze:
 plot(posterior_predictive(fit), stats = c("mean", "max", "sd"))
 ```
 <p float="left">
-  <img src="figures/ppc_ECDF.png" width="100" />
-  <img src="figures/ppc_hist.png" width="100" /> 
+  <img src="figures/ppc_ECDF.png" width="500" />
+  <img src="figures/ppc_hist.png" width="500" /> 
 </p>
-
+<p float="left">
+  <img src="figures/plot_stats.png" width="1000" />
+</p>
 
 
 
