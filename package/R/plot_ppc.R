@@ -97,6 +97,7 @@ plot.posterior_check = function(x, ...)
 
 .plotSTAT = function(object, burnin, stats = c("mean"))
 {
+  par(mfrow = c(1,1))
   if(length(stats) == 1){
     res = apply(object$y_pred[,-burnin], 2, function(y) do.call(stats, list(y)) )
     hist(res, main = paste0("Histogram of posterior predictive ", stats),

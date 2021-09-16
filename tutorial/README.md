@@ -99,7 +99,7 @@ summary(fit)
    ##  Mean effective sample size is equal to 225. 
    ##  Acceptance rate is 0.491.
 ```
-In this case, we see that all regression coefficients are useful, as none of the credible intervals contains zero.
+In this case, we see that all covariates are useful, as none of the credible intervals of the regression coefficients contains zero.
 Moreover, these estimates are computed based on 225 effectively independent draws, after discarding the first 250 iterations as burn-in and considering the autocorrelation of the chain.
 
 
@@ -134,11 +134,16 @@ will produce trace-plots of the sampled outputs and a density estimate for each 
 #### Posterior predictive check
 Finally, an important step is evaluating the fit of the model to the data. This can be done through the posterior predictive distribution.
 The posterior predictive distribution can be computed with the function `posterior_predictive()` applied to a `poisreg` object. The results can be used in several ways to check the goodness of the model; alternatively, a more automatic way is to call the `plot` function on the output, which produces (at least) three different plots for a graphical posterior check.
+
+The first plot compares the empirical cumulative distribution function (ECDF) of the observed data and the CDF computed on the predicted samples; the second plot compares the distribution of the observed data (histogram) with the maximum a posteriori predictive distribution; and finally, the last plot compares the predictive distribution of a statistic with the observed value.
+For this last plot, it is possible to choose what statistics we want to analyze: the default is the mean, but it is possible to pass additional functions using the `stats` parameter, as shown here:
 ```r
-plot(posterior_predictive(fit), stats = c("mean", "max"))
+plot(posterior_predictive(fit), stats = c("mean", "max", "sd"))
 ```
-
-
+<figure class="half" style="display:flex">
+    <img style="width:400px" src="figures/ppc_ECDF.pdf">
+    <img style="width:400px" src="/figures/ppc_hist.pdf">
+</figure>
 
 
 
