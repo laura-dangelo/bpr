@@ -4,9 +4,9 @@
 This tutorial is a short guide on the use of the `bpr` package to perform posterior sampling and inference on the parameters of Bayesian Poisson regression models.
 
 In this part, just the basic usage is covered: additional tutorials are provided on the specific functionalities
-* [tutorial_MCMC](/tutorial_MCMC.md) : explains the use of MCMC parameters (tuning, burnin, thinning, multiple chains);
-* [tutorial_prior](/tutorial_prior.d) : explains the different prior distributions implemented;
-* [tutorial_IS](/tutorial_IS.md) : on the use of the importance sampler algorithm (instead of MH).
+* [tutorial_MCMC](tutorial_MCMC.md) : explains the use of MCMC parameters (tuning, burnin, thinning, multiple chains);
+* [tutorial_prior](tutorial_prior.d) : explains the different prior distributions implemented;
+* [tutorial_IS](tutorial_IS.md) : on the use of the importance sampler algorithm (instead of MH).
 
 ### Model specification
 First, we briefly recall the model specification and prior distributions available in the package.
