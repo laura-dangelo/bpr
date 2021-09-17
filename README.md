@@ -1,9 +1,10 @@
-# BPR package
+# `bpr` package
 ## Posterior sampling and inference for Bayesian Poisson Regression
 
 Efficient C++ based R package to sample from the posterior distribution of Poisson regression models. 
 The model specification makes use of Gaussian (or conditionally Gaussian) prior distributions on the regression coefficients. 
 
+A tutorial on how to use the package can be found [here](/tutorial).
 
 ### Installation
 #### From Github
