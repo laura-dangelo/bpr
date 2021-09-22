@@ -7,16 +7,15 @@ The model specification makes use of Gaussian (or conditionally Gaussian) prior 
 A tutorial on how to use the package can be found [here](/tutorial).
 
 ### Installation
-#### From Github
-```{R}
-library(devtools)
-install_github("laura-dangelo/bpr/package")
+The package is available on CRAN. To install it, simply run
+```r
+install.packages("bpr")
 ```
 
-#### From source
-Download the tarball archive "bpr_1.0.1.tar.gz". In R, run
-```{R}
-install.packages("path/to/bpr_1.0.1.tar.gz", repos = NULL, source = TRUE)
+#### Alternative installation from Github
+```r
+library(devtools)
+install_github("laura-dangelo/bpr/package")
 ```
 
 The package requires [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html#:~:text=The%20'Rcpp'%20package%20provides%20R,integration%20of%20third%2Dparty%20libraries.), [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html) and the C++ library [boost](https://www.boost.org/).
