@@ -147,10 +147,7 @@
 #' 
 #' @export
 #' @importFrom coda as.mcmc
-#' @import Rcpp
-#' @import RcppArmadillo
 #' @import MASS
-#' @useDynLib bpr
 sample_bpr = function(formula = NULL, data = NULL,
                           iter, burnin = NULL,
                           prior = list(type = "gaussian",

@@ -1,13 +1,6 @@
-// -*- mode: C++; c-indent-level: 4; c-basic-offset: 4; indent-tabs-mode: nil; -*-
-
-#include "RcppArmadillo.h"
 #include "commonfunctions.h"
 
-#include <boost/math/special_functions/lambert_w.hpp>
 using boost::math::lambert_w0;
-
-// [[Rcpp::depends(RcppArmadillo)]]
-// [[Rcpp::depends(BH)]]
 
 // Multivariate normal density
 double Mahalanobis(arma::vec x, arma::vec center, arma::mat cov) {

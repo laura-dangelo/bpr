@@ -1,5 +1,4 @@
 #' @keywords internal
-#' @import Rcpp
 .sampling = function(formula, data, y, X,
                     iter, burnin,
                     prior, pars,

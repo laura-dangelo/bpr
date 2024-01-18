@@ -1,3 +1,4 @@
+#include <RcppArmadillo.h>
 #include "commonfunctions.h"
 
 // [[Rcpp::export(.ISPolya_horseshoe)]]

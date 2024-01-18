@@ -1,3 +1,4 @@
+#include <RcppArmadillo.h>
 #include "commonfunctions.h"
 
 // [[Rcpp::export(.MHPolya_adaptr_horseshoe_burnin)]]
