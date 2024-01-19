@@ -25,6 +25,6 @@ The package requires [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.h
 ## How to cite
 Thank you for your interest in my work! If you use this package in any of your projects, please cite the package and the related paper as:
 
-- D’Angelo, L. (2021), 'bpr: Bayesian Poisson regression', URL: https://CRAN.R-project.org/package=bpr
+- D’Angelo, L. (2024), 'bpr: Bayesian Poisson regression', R package, version 1.0.7, URL: https://CRAN.R-project.org/package=bpr
 
-- D'Angelo, L. and Canale, A. (2022), 'Efficient posterior sampling for Bayesian Poisson regression', arXiv preprint at _arXiv:2109.09520_
+- D'Angelo, L. and Canale, A. (2023), 'Efficient posterior sampling for Bayesian Poisson regression', _Journal of Computational and Graphical Statistics_, 32(3), 917–926. doi:10.1080/10618600.2022.2123337
