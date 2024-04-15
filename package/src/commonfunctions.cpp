@@ -62,7 +62,7 @@ double pgmean(double b, double c)
 
 double r_root(double lambda, double d)
 {
-  double c = exp( lambda ) * (d * d + 1) ;
+  double c = exp( lambda ) * (d + 1) ;
   double logc = log(c) ;
   double r = lambda * logc /  ( logc + lambda * lambert_w0(- pow(c, -1/lambda) * logc /lambda ) ) ;
   return(r) ;

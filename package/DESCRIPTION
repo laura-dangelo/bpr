@@ -1,8 +1,8 @@
 Package: bpr
 Type: Package
 Title: Fitting Bayesian Poisson Regression
-Version: 1.0.7
-Date: 2024-01-18
+Version: 1.0.8
+Date: 2024-04-15
 Author: Laura D'Angelo
 Maintainer: Laura D'Angelo <laura.dangelo@live.com>
 Description: Posterior sampling and inference for Bayesian Poisson regression models. The model specification makes use of Gaussian (or conditionally Gaussian) prior distributions on the regression coefficients. Details on the algorithm are found in D'Angelo and Canale (2023) <doi:10.1080/10618600.2022.2123337>.
