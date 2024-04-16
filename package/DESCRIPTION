@@ -12,3 +12,4 @@ RoxygenNote: 7.2.0
 Imports: Rcpp (>= 1.0.7), coda, MASS
 LinkingTo: Rcpp, RcppArmadillo, BH
 NeedsCompilation: yes
+Packaged: 2024-04-15 08:56:04 UTC; laura
